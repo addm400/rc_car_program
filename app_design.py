@@ -6,6 +6,7 @@ from PIL import Image
 
 """
 Now this project is using Git as version control unit
+to jest już napisane z laptopa
 """
 
 class App(customtkinter.CTk):
