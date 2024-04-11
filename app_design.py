@@ -5,9 +5,9 @@ import os
 from PIL import Image
 
 """
-Now this project is using Git as version control unit
-to jest już napisane z laptopa
+Main file for RC control car program 
 """
+
 
 class App(customtkinter.CTk):
     def __init__(self):
@@ -30,10 +30,6 @@ class App(customtkinter.CTk):
         self.keyboard_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "strzalki.png")), size=(251, 242))
         self.board = customtkinter.CTkImage(Image.open(os.path.join(image_path, "plansza.png")), size=(280, 280))
         self.analog = customtkinter.CTkImage(Image.open(os.path.join(image_path, "kolko.png")), size=(50, 50))
-
-        self.console1position = 5.0  # zastanowić się czy nie dodać tutaj self
-        self.console2position = 5.0
-        self.console3position = 5.0
 
         # create navigation frame
         self.navigation_frame = customtkinter.CTkFrame(self, corner_radius=0)
@@ -63,7 +59,8 @@ class App(customtkinter.CTk):
         self.home_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.home_frame.grid_columnconfigure(0, weight=1)
 
-        # create textbox no 1
+        # create textbox/consol no 1
+        self.console1position = 5.0
         self.textbox1 = customtkinter.CTkTextbox(self, width=360, height=50)
         self.textbox1.grid(row=0, column=1, padx=(20, 12), pady=(330, 20), sticky="nsew")
         self.textbox1.insert("0.0", "Console\n\n" + "Some info.\n\n")
@@ -80,7 +77,8 @@ class App(customtkinter.CTk):
                                                                           "D – TURN RIGHT")
         self.label_tab_2.grid(row=1, column=1, padx=(20, 20), pady=(0, 8))
 
-        # create textbox no 2
+        # create textbox/console no 2
+        self.console2position = 5.0
         self.textbox2 = customtkinter.CTkTextbox(self.second_frame, width=569, height=150)
         self.textbox2.grid(row=2, column=1, columnspan=2, padx=(20, 20), pady=(20, 0))
         self.textbox2.insert("0.0", "Console\n\n" + "Some info.\n\n")
@@ -116,9 +114,8 @@ class App(customtkinter.CTk):
         self.joystick_steering_label.bind("<B1-Motion>", self.drag_motion)
         self.joystick_steering_label.bind("<ButtonRelease-1>", self.dropped)
 
-        self.speed_data = [180, 0]
-
-        # create textbox no 3
+        # create textbox/consol no 3
+        self.console3position = 5.0
         self.textbox3 = customtkinter.CTkTextbox(self.third_frame, width=569, height=150)
         self.textbox3.grid(row=1, column=0, columnspan=2, padx=(20, 20), pady=(30, 20), sticky="nsew")
         self.textbox3.insert("0.0", "Console\n\n" + "Some info.\n\n")
@@ -126,19 +123,22 @@ class App(customtkinter.CTk):
         # select default frame
         self.select_frame_by_name("home")
 
-        """key control section"""
+        """Car control"""
+        # initial speed value of a car
+        self.current_speed = [62]
 
+        # tab for holding speed data which will be sent to the car
+        self.speed_data = [180, 0]
+
+        # binding key press and release
         self.bind('<Key>', self.key_press)
         self.bind("<KeyRelease>", self.key_release)
 
+        # starting periodic function to pass data
         self.alarm = self.after(100, self.printer)
-        # wydruk wartości sterowanych samochodu
 
-        self.current_speed = [62]
-        # wartość początkowa prędkości
-
+        # tab for holding which window is currently displayed (1/2/3)
         self.which_window = [1]
-        # okno home otwiera się jako pierwsze przyjmuje wartości 1, 2, 3
 
     def select_frame_by_name(self, name):
         # set button color for selected button
@@ -260,18 +260,14 @@ class App(customtkinter.CTk):
             elif event.char == "d":
                 self.speed_data[0] = 180
 
+    """periodic function for sending/printing data which control the car"""
     def printer(self):
         print(self.speed_data)
         self.alarm = self.after(10, self.printer)
 
-    # funkcja do zamiany jednostek na osiach
+    # function to convert units from axes (joystick) into real car control values
     def speed_data_conversion(self):
 
-        """
-        1 część zrobiona aby przekształcić dane zebrane z osi Y
-        na wartości odpowiadające sterowaniu silnika (DC 3V/6V)
-        ruch przód-tył, aktualny zakres: 92 - 208
-        """
         if 11 < self.speed_data[1] < 71:
             self.speed_data[1] = 2 * self.speed_data[1] + 68
         elif -11 > self.speed_data[1] > -71:
@@ -286,12 +282,12 @@ class App(customtkinter.CTk):
             self.speed_data[1] = 208
         elif self.speed_data[1] < -71:
             self.speed_data[1] = -208
+        """
+        1 część zrobiona aby przekształcić dane zebrane z osi Y
+        na wartości odpowiadające sterowaniu silnika (DC 3V/6V)
+        ruch przód-tył, aktualny zakres: 92 - 208
+        """
 
-        """
-        2 część zrobiona aby przekształcić dane zebrane z osi X
-        na wartości odpowiadające sterowaniu silnika (krokowego)
-        skręt kół lewo-prawo, aktualny zakres: 120 - 240 (stopni)
-        """
         if 11 < self.speed_data[0] < 71:
             self.speed_data[0] = self.speed_data[0] + 169
         elif -11 > self.speed_data[0] > -71:
@@ -304,5 +300,10 @@ class App(customtkinter.CTk):
             self.speed_data[0] = 240
         elif self.speed_data[0] < -71:
             self.speed_data[0] = 120
+        """
+        2 część zrobiona aby przekształcić dane zebrane z osi X
+        na wartości odpowiadające sterowaniu silnika (krokowego)
+        skręt kół lewo-prawo, aktualny zakres: 120 - 240 (stopni)
+        """
 
 
