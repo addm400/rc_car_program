@@ -108,7 +108,6 @@ class App(customtkinter.CTk):
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
         self.joystick_steering_label = customtkinter.CTkLabel(self.third_frame, image=self.board, text="")
-        self.joystick_steering_label = customtkinter.CTkLabel(self.third_frame, image=self.board,  text="")
         self.joystick_steering_label.grid(row=0, column=0, pady=(20, 0), padx=(0, 140), sticky="nsew")
         self.joystick_steering_label = customtkinter.CTkLabel(self.third_frame, image=self.analog, text="")
         self.joystick_steering_label.place(x=162, y=135)
