@@ -4,6 +4,9 @@ from tkinter import *
 import os
 from PIL import Image
 
+"""
+Now this project is using Git as version control unit
+"""
 
 class App(customtkinter.CTk):
     def __init__(self):
