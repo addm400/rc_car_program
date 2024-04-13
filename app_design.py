@@ -270,9 +270,9 @@ class App(customtkinter.CTk):
         #widget.place(x=x, y=y)
         #self.joystick_steering_label.place(x=x, y=y)
         #self.joystick_board.move(self.joystick_steering_label, x, y)
-        self.speed_data[0] = x-162
-        self.speed_data[1] = (y-135)*(-1)
-        self.speed_data_conversion()
+        #self.speed_data[0] = x-162
+        #self.speed_data[1] = (y-135)*(-1)
+        #self.speed_data_conversion()
 
     def dropped(self, event):
         #self.joystick_steering_label.place(x=162, y=135)
