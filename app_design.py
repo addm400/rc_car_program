@@ -103,16 +103,35 @@ class App(customtkinter.CTk):
         self.radio_button_3.grid(row=3, column=2, pady=10, padx=(76, 0), sticky="n")
 
         # create third frame
+
+        self.dragInfo_widget = None
+        self.dragInfo_x = 0
+        self.dragInfo_y = 0
+
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
-        self.joystick_steering_label = customtkinter.CTkLabel(self.third_frame, image=self.board, text="")
-        self.joystick_steering_label.grid(row=0, column=0, pady=(20, 0), padx=(0, 140), sticky="nsew")
-        self.joystick_steering_label = customtkinter.CTkLabel(self.third_frame, image=self.analog, text="")
-        self.joystick_steering_label.place(x=162, y=135)
+        self.joystick_board = Canvas(self.third_frame, width=200, height=250)
+        self.joystick_board.grid(row=0, column=0, pady=(20, 0), padx=(20, 140), sticky="nsew")
 
-        self.joystick_steering_label.bind("<Button-1>", self.drag_start)
-        self.joystick_steering_label.bind("<B1-Motion>", self.drag_motion)
-        self.joystick_steering_label.bind("<ButtonRelease-1>", self.dropped)
+        self.bgphoto = PhotoImage(file='test_images//plansza.png')
+        self.plansza = self.joystick_board.create_image(0, 0, image=self.bgphoto, anchor=NW)
+
+        self.photoimage = PhotoImage(file='test_images//kontroler.png')
+        self.joystick_steering_label = self.joystick_board.create_image(0,0,image=self.photoimage, anchor=NW)
+
+
+
+
+
+        #self.joystick_steering_label = customtkinter.CTkLabel(self.third_frame, image=self.analog, text="")
+        #self.joystick_steering_label.place(x=162, y=135)
+
+        self.joystick_board.tag_bind(self.joystick_steering_label, "<Button-1>", self.drag_start)
+        self.joystick_board.tag_bind(self.joystick_steering_label, "<B1-Motion>", self.drag_motion)
+        self.joystick_board.tag_bind(self.joystick_steering_label, "<ButtonRelease-1>", self.dropped)
+
+        #self.joystick_steering_label.bind("<B1-Motion>", self.drag_motion)
+        #self.joystick_steering_label.bind("<ButtonRelease-1>", self.dropped)
 
         # create textbox/consol no 3
         self.console3position = 5.0
@@ -135,7 +154,7 @@ class App(customtkinter.CTk):
         self.bind("<KeyRelease>", self.key_release)
 
         # starting periodic function to pass data
-        self.alarm = self.after(100, self.printer)
+        #self.alarm = self.after(100, self.printer)
 
         # tab for holding which window is currently displayed (1/2/3)
         self.which_window = [1]
@@ -190,17 +209,39 @@ class App(customtkinter.CTk):
     # wracanie joysticka na środek układu
 
     def drag_start(self, event):
-        self.joystick_steering_label.startX = event.x
-        self.joystick_steering_label.startY = event.y
+        winX = event.x - self.joystick_board.canvasx(0)
+        winY = event.y - self.joystick_board.canvasy(0)
+        self.dragInfo_widget = self.joystick_board.find_closest(event.x, event.y, halo=5)[0]
+
+        self.dragInfo_x = winX
+        self.dragInfo_y = winY
+
+    #self.joystick_steering_label.startX = event.x
+        #self.joystick_steering_label.startY = event.y
     # złapanie obiektu myszką
 
     def drag_motion(self, event):
+        winX = event.x - self.joystick_board.canvasx(0)
+        winY = event.y - self.joystick_board.canvasy(0)
+        newX = winX - self.dragInfo_x
+        newY = winY - self.dragInfo_y
 
-        x = self.joystick_steering_label.winfo_x() - self.joystick_steering_label.startX + event.x
-        y = self.joystick_steering_label.winfo_y() - self.joystick_steering_label.startY + event.y
+        self.joystick_board.move(self.dragInfo_widget, newX, newY)
+        self.dragInfo_x = winX
+        self.dragInfo_y = winY
+
+        #self.dragInfo_x = newX
+        #self.dragInfo_y = newY
+        print(self.dragInfo_x, self.dragInfo_y)
+
+        #widget._drag_start_x = event.x
+        #widget._drag_start_y = event.y
+
+        #x = self.joystick_steering_label.winfo_x() - self.joystick_steering_label.startX + event.x
+        #y = self.joystick_steering_label.winfo_y() - self.joystick_steering_label.startY + event.y
         # obsługa przesuwania obiektu w naszym układzie wspl
 
-        """logika do tego aby joystick trzymał się w granicach naszego układu"""
+        """logika do tego aby joystick trzymał się w granicach naszego układu
         if y < 54 and x > 243:
             y = 54
             x = 243
@@ -224,15 +265,21 @@ class App(customtkinter.CTk):
             if x < 81:
                 x = 81
             if x > 243:
-                x = 243
+                x = 243 """
 
-        self.joystick_steering_label.place(x=x, y=y)
+        #widget.place(x=x, y=y)
+        #self.joystick_steering_label.place(x=x, y=y)
+        #self.joystick_board.move(self.joystick_steering_label, x, y)
         self.speed_data[0] = x-162
         self.speed_data[1] = (y-135)*(-1)
         self.speed_data_conversion()
 
     def dropped(self, event):
-        self.joystick_steering_label.place(x=162, y=135)
+        #self.joystick_steering_label.place(x=162, y=135)
+
+        self.dragInfo_widget = None
+        self.dragInfo_x = 0
+        self.dragInfo_y = 0
 
         self.speed_data[0] = 180
         self.speed_data[1] = 0
