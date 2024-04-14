@@ -104,14 +104,11 @@ class App(customtkinter.CTk):
 
         # create third frame
 
-        #self.dragInfo_widget = None
         self.canvas_height = 275
         self.canvas_width = 110
         self.dragInfo_x = 0
         self.dragInfo_y = 0
         self.coordinates = []
-
-
 
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
@@ -123,23 +120,14 @@ class App(customtkinter.CTk):
 
         self.photoimage = PhotoImage(file='test_images//kontroler.png')
         self.joystick_steering_label = self.joystick_board.create_image(0,0,image=self.photoimage, anchor=NW)
+        self.joystick_board.moveto(self.joystick_steering_label, 115, 115)
 
         self.joystick_height = self.photoimage.height()
         self.joystick_width = self.photoimage.width()
 
-
-
-
-
-        #self.joystick_steering_label = customtkinter.CTkLabel(self.third_frame, image=self.analog, text="")
-        #self.joystick_steering_label.place(x=162, y=135)
-
         self.joystick_board.tag_bind(self.joystick_steering_label, "<Button-1>", self.drag_start)
         self.joystick_board.tag_bind(self.joystick_steering_label, "<B1-Motion>", self.drag_motion)
         self.joystick_board.tag_bind(self.joystick_steering_label, "<ButtonRelease-1>", self.dropped)
-
-        #self.joystick_steering_label.bind("<B1-Motion>", self.drag_motion)
-        #self.joystick_steering_label.bind("<ButtonRelease-1>", self.dropped)
 
         # create textbox/consol no 3
         self.console3position = 5.0
@@ -217,100 +205,49 @@ class App(customtkinter.CTk):
     # wracanie joysticka na środek układu
 
     def drag_start(self, event):
-
         self.coordinates = self.joystick_board.coords(self.joystick_steering_label)
+        self.oldx = self.dragInfo_x = event.x
+        self.oldy = self.dragInfo_y = event.y
 
-        winX = event.x - self.joystick_board.canvasx(0)
-        winY = event.y - self.joystick_board.canvasy(0)
-        #self.dragInfo_widget = self.joystick_board.find_closest(event.x, event.y, halo=5)[0]
-
-        self.dragInfo_x = winX
-        self.dragInfo_y = winY
-        self.oldx = winX
-        self.oldy = winY
-
-    #self.joystick_steering_label.startX = event.x
-        #self.joystick_steering_label.startY = event.y
     # złapanie obiektu myszką
 
     def drag_motion(self, event):
-        winX = event.x # - self.joystick_board.canvasx(0)
-        winY = event.y # - self.joystick_board.canvasy(0)
+        winX = event.x
+        winY = event.y
         newX = winX - self.dragInfo_x
         newY = winY - self.dragInfo_y
 
-
-
-
         x = self.coordinates[0] - self.oldx + event.x
         y = self.coordinates[1] - self.oldy + event.y
-
-
-
-
-        #self.dragInfo_x = newX
-        #self.dragInfo_y = newY
 
 
         if x >= self.canvas_height - self.joystick_height or x<0:
             newX = 0
         else:
             self.oldx = winX
+
+        if y >= self.canvas_height - self.joystick_height or y<0:
+            newY = 0
+        else:
             self.oldy = winY
 
 
-
-
-        #widget._drag_start_x = event.x
-        #widget._drag_start_y = event.y
-
-        #x = self.joystick_steering_label.winfo_x() - self.joystick_steering_label.startX + event.x
-        #y = self.joystick_steering_label.winfo_y() - self.joystick_steering_label.startY + event.y
         # obsługa przesuwania obiektu w naszym układzie wspl
         self.joystick_board.move(self.joystick_steering_label, newX, newY)
         self.dragInfo_x = winX
         self.dragInfo_y = winY
         self.coordinates = self.joystick_board.coords(self.joystick_steering_label)
-        print(x, y)
-        #print(self.coordinates)
+        print(self.coordinates)
 
-        """logika do tego aby joystick trzymał się w granicach naszego układu
-        if y < 54 and x > 243:
-            y = 54
-            x = 243
-        elif y > 216 and x < 81:
-            x = 81
-            y = 216
-        elif x > 243:
-            x = 243
-            if y > 216:
-                y = 216
-        elif y > 216:
-            y = 216
-            if x > 243:
-                x = 243
-        elif x < 81:
-            x = 81
-            if y < 54:
-                y = 54
-        elif y < 54:
-            y = 54
-            if x < 81:
-                x = 81
-            if x > 243:
-                x = 243 """
 
-        #widget.place(x=x, y=y)
-        #self.joystick_steering_label.place(x=x, y=y)
-        #self.joystick_board.move(self.joystick_steering_label, x, y)
         #self.speed_data[0] = x-162
         #self.speed_data[1] = (y-135)*(-1)
         #self.speed_data_conversion()
 
     def dropped(self, event):
-        #self.joystick_steering_label.place(x=162, y=135)
 
-        #self.dragInfo_widget = None
+        self.joystick_board.moveto(self.joystick_steering_label, 115, 115)
+
         self.dragInfo_x = 0
         self.dragInfo_y = 0
 
