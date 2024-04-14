@@ -150,7 +150,7 @@ class App(customtkinter.CTk):
         self.bind("<KeyRelease>", self.key_release)
 
         # starting periodic function to pass data
-        #self.alarm = self.after(100, self.printer)
+        self.alarm = self.after(100, self.printer)
 
         # tab for holding which window is currently displayed (1/2/3)
         self.which_window = [1]
@@ -246,11 +246,13 @@ class App(customtkinter.CTk):
         # obsługa przesuwania obiektu w naszym układzie wspl
         self.joystick_board.moveto(self.joystick_steering_label, x, y)
         self.coordinates = self.joystick_board.coords(self.joystick_steering_label)
+
         self.coordinates[0] = int(self.coordinates[0])
         self.coordinates[1] = int(self.coordinates[1])
+
         self.axis_conversion(self.coordinates)
         self.speed_data_conversion()
-        print(self.speed_data)
+
         """moze trzeba dodać zabezpieczenie że jeżeli za mocno przeciągniemy to joystick wraca do jakiejs pozcyji"""
 
     def dropped(self, event):
