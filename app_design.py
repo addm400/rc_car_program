@@ -28,8 +28,8 @@ class App(customtkinter.CTk):
         self.chat_image = customtkinter.CTkImage(dark_image=Image.open(os.path.join(image_path, "keyboard_pic.png")), size=(20, 20))
         self.add_user_image = customtkinter.CTkImage(dark_image=Image.open(os.path.join(image_path, "joystick_pic.png")), size=(20, 20))
         self.keyboard_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "strzalki.png")), size=(251, 242))
-        self.board = customtkinter.CTkImage(Image.open(os.path.join(image_path, "plansza.png")), size=(280, 280))
-        self.analog = customtkinter.CTkImage(Image.open(os.path.join(image_path, "kolko.png")), size=(50, 50))
+        #self.board = customtkinter.CTkImage(Image.open(os.path.join(image_path, "plansza.png")), size=(280, 280))
+        #self.analog = customtkinter.CTkImage(Image.open(os.path.join(image_path, "kolko.png")), size=(50, 50))
 
         # create navigation frame
         self.navigation_frame = customtkinter.CTkFrame(self, corner_radius=0)
@@ -104,18 +104,18 @@ class App(customtkinter.CTk):
 
         # create third frame
 
-        self.canvas_height = 270
-        self.canvas_width = 100
+        self.canvas_height = 275
+        self.canvas_width = 102
         self.dragInfo_x = 0
         self.dragInfo_y = 0
         self.coordinates = []
 
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
-        self.joystick_board = Canvas(self.third_frame, width=self.canvas_width, height=self.canvas_height, bg="black")
+        self.joystick_board = Canvas(self.third_frame, width=self.canvas_width, height=self.canvas_height, highlightthickness=0)
         self.joystick_board.grid(row=0, column=0, pady=(20, 0), padx=(20, 140), sticky="nsew")
 
-        self.bgphoto = PhotoImage(file='test_images//arrows_2.png')
+        self.bgphoto = PhotoImage(file='test_images//arrows.png')
         self.plansza = self.joystick_board.create_image(0, 0, image=self.bgphoto, anchor=NW)
 
         self.photoimage = PhotoImage(file='test_images//kolko.png')
@@ -246,11 +246,11 @@ class App(customtkinter.CTk):
         # obsługa przesuwania obiektu w naszym układzie wspl
         self.joystick_board.moveto(self.joystick_steering_label, x, y)
         self.coordinates = self.joystick_board.coords(self.joystick_steering_label)
-        print(self.coordinates)
-
-        #self.speed_data[0] = x-162
-        #self.speed_data[1] = (y-135)*(-1)
-        #self.speed_data_conversion()
+        self.coordinates[0] = int(self.coordinates[0])
+        self.coordinates[1] = int(self.coordinates[1])
+        self.axis_conversion(self.coordinates)
+        self.speed_data_conversion()
+        print(self.speed_data)
         """moze trzeba dodać zabezpieczenie że jeżeli za mocno przeciągniemy to joystick wraca do jakiejs pozcyji"""
 
     def dropped(self, event):
@@ -291,37 +291,37 @@ class App(customtkinter.CTk):
     # function to convert units from axes (joystick) into real car control values
     def speed_data_conversion(self):
 
-        if 11 < self.speed_data[1] < 71:
-            self.speed_data[1] = 2 * self.speed_data[1] + 68
-        elif -11 > self.speed_data[1] > -71:
-            self.speed_data[1] = 2 * self.speed_data[1] - 68
+        if 15 < self.speed_data[1] < 85:
+            self.speed_data[1] = 2*self.speed_data[1] + 44
+        elif -15 > self.speed_data[1] > -85:
+            self.speed_data[1] = 2*self.speed_data[1] - 44
 
-        elif 11 > self.speed_data[1] >= 0:
+        elif 15 > self.speed_data[1] >= 0:
             self.speed_data[1] = 0
-        elif -11 < self.speed_data[1] <= 0:
+        elif -15 < self.speed_data[1] <= 0:
             self.speed_data[1] = 0
 
-        elif self.speed_data[1] > 71:
-            self.speed_data[1] = 208
-        elif self.speed_data[1] < -71:
-            self.speed_data[1] = -208
+        elif self.speed_data[1] > 85:
+            self.speed_data[1] = 214
+        elif self.speed_data[1] < -85:
+            self.speed_data[1] = -214
         """
         1 część zrobiona aby przekształcić dane zebrane z osi Y
         na wartości odpowiadające sterowaniu silnika (DC 3V/6V)
         ruch przód-tył, aktualny zakres: 92 - 208
         """
 
-        if 11 < self.speed_data[0] < 71:
-            self.speed_data[0] = self.speed_data[0] + 169
-        elif -11 > self.speed_data[0] > -71:
-            self.speed_data[0] = self.speed_data[0] + 191
+        if 15 < self.speed_data[0] < 81:
+            self.speed_data[0] = self.speed_data[0] + 165
+        elif -15 > self.speed_data[0] > -81:
+            self.speed_data[0] = self.speed_data[0] + 195
 
-        elif 11 > self.speed_data[0] > -11:
+        elif 15 > self.speed_data[0] > -15:
             self.speed_data[0] = 180
 
-        elif self.speed_data[0] > 71:
+        elif self.speed_data[0] > 81:
             self.speed_data[0] = 240
-        elif self.speed_data[0] < -71:
+        elif self.speed_data[0] < -81:
             self.speed_data[0] = 120
         """
         2 część zrobiona aby przekształcić dane zebrane z osi X
@@ -332,5 +332,20 @@ class App(customtkinter.CTk):
     def change_scaling_event(self, new_scaling: str):
         new_scaling_float = int(new_scaling.replace("%", "")) / 100
         customtkinter.set_widget_scaling(new_scaling_float)
+
+    def axis_conversion(self, tab):
+        if tab[0] < 98:
+            self.speed_data[0] = self.coordinates[0] - 97
+        if tab[0] > 98:
+            self.speed_data[0] = self.coordinates[0] - 98
+        if tab[0] == 98:
+            self.speed_data[0] = 0
+
+        if tab[1] < 98:
+            self.speed_data[1] = -self.coordinates[1] + 97
+        if tab[1] > 98:
+            self.speed_data[1] = -(self.coordinates[1] - 98)
+        if tab[1] == 98:
+            self.speed_data[1] = 0
 
 
