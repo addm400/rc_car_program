@@ -253,7 +253,6 @@ class App(customtkinter.CTk):
         self.axis_conversion(self.coordinates)
         self.speed_data_conversion()
 
-        """moze trzeba dodać zabezpieczenie że jeżeli za mocno przeciągniemy to joystick wraca do jakiejs pozcyji"""
 
     def dropped(self, event):
 
