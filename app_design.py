@@ -104,13 +104,18 @@ class App(customtkinter.CTk):
 
         # create third frame
 
-        self.dragInfo_widget = None
+        #self.dragInfo_widget = None
+        self.canvas_height = 275
+        self.canvas_width = 110
         self.dragInfo_x = 0
         self.dragInfo_y = 0
+        self.coordinates = []
+
+
 
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
-        self.joystick_board = Canvas(self.third_frame, width=200, height=250)
+        self.joystick_board = Canvas(self.third_frame, width=self.canvas_width, height=self.canvas_height)
         self.joystick_board.grid(row=0, column=0, pady=(20, 0), padx=(20, 140), sticky="nsew")
 
         self.bgphoto = PhotoImage(file='test_images//plansza.png')
@@ -118,6 +123,9 @@ class App(customtkinter.CTk):
 
         self.photoimage = PhotoImage(file='test_images//kontroler.png')
         self.joystick_steering_label = self.joystick_board.create_image(0,0,image=self.photoimage, anchor=NW)
+
+        self.joystick_height = self.photoimage.height()
+        self.joystick_width = self.photoimage.width()
 
 
 
@@ -209,30 +217,49 @@ class App(customtkinter.CTk):
     # wracanie joysticka na środek układu
 
     def drag_start(self, event):
+
+        self.coordinates = self.joystick_board.coords(self.joystick_steering_label)
+
         winX = event.x - self.joystick_board.canvasx(0)
         winY = event.y - self.joystick_board.canvasy(0)
-        self.dragInfo_widget = self.joystick_board.find_closest(event.x, event.y, halo=5)[0]
+        #self.dragInfo_widget = self.joystick_board.find_closest(event.x, event.y, halo=5)[0]
 
         self.dragInfo_x = winX
         self.dragInfo_y = winY
+        self.oldx = winX
+        self.oldy = winY
 
     #self.joystick_steering_label.startX = event.x
         #self.joystick_steering_label.startY = event.y
     # złapanie obiektu myszką
 
     def drag_motion(self, event):
-        winX = event.x - self.joystick_board.canvasx(0)
-        winY = event.y - self.joystick_board.canvasy(0)
+        winX = event.x # - self.joystick_board.canvasx(0)
+        winY = event.y # - self.joystick_board.canvasy(0)
         newX = winX - self.dragInfo_x
         newY = winY - self.dragInfo_y
 
-        self.joystick_board.move(self.dragInfo_widget, newX, newY)
-        self.dragInfo_x = winX
-        self.dragInfo_y = winY
+
+
+
+        x = self.coordinates[0] - self.oldx + event.x
+        y = self.coordinates[1] - self.oldy + event.y
+
+
+
 
         #self.dragInfo_x = newX
         #self.dragInfo_y = newY
-        print(self.dragInfo_x, self.dragInfo_y)
+
+
+        if x >= self.canvas_height - self.joystick_height or x<0:
+            newX = 0
+        else:
+            self.oldx = winX
+            self.oldy = winY
+
+
+
 
         #widget._drag_start_x = event.x
         #widget._drag_start_y = event.y
@@ -240,6 +267,12 @@ class App(customtkinter.CTk):
         #x = self.joystick_steering_label.winfo_x() - self.joystick_steering_label.startX + event.x
         #y = self.joystick_steering_label.winfo_y() - self.joystick_steering_label.startY + event.y
         # obsługa przesuwania obiektu w naszym układzie wspl
+        self.joystick_board.move(self.joystick_steering_label, newX, newY)
+        self.dragInfo_x = winX
+        self.dragInfo_y = winY
+        self.coordinates = self.joystick_board.coords(self.joystick_steering_label)
+        print(x, y)
+        #print(self.coordinates)
 
         """logika do tego aby joystick trzymał się w granicach naszego układu
         if y < 54 and x > 243:
@@ -277,7 +310,7 @@ class App(customtkinter.CTk):
     def dropped(self, event):
         #self.joystick_steering_label.place(x=162, y=135)
 
-        self.dragInfo_widget = None
+        #self.dragInfo_widget = None
         self.dragInfo_x = 0
         self.dragInfo_y = 0
 
