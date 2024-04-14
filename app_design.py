@@ -155,6 +155,13 @@ class App(customtkinter.CTk):
         # tab for holding which window is currently displayed (1/2/3)
         self.which_window = [1]
 
+        self.scaling_label = customtkinter.CTkLabel(self.navigation_frame, text="UI Scaling:", anchor="w")
+        self.scaling_label.grid(row=7, column=0, padx=20, pady=(10, 0))
+        self.scaling_optionemenu = customtkinter.CTkOptionMenu(self.navigation_frame,
+                                                               values=["80%", "90%", "100%", "110%", "120%"],
+                                                               command=self.change_scaling_event)
+        self.scaling_optionemenu.grid(row=8, column=0, padx=20, pady=(10, 20))
+
     def select_frame_by_name(self, name):
         # set button color for selected button
         self.home_button.configure(fg_color=("gray75", "gray25") if name == "home" else "transparent")
@@ -321,5 +328,9 @@ class App(customtkinter.CTk):
         na wartości odpowiadające sterowaniu silnika (krokowego)
         skręt kół lewo-prawo, aktualny zakres: 120 - 240 (stopni)
         """
+
+    def change_scaling_event(self, new_scaling: str):
+        new_scaling_float = int(new_scaling.replace("%", "")) / 100
+        customtkinter.set_widget_scaling(new_scaling_float)
 
 
