@@ -119,7 +119,7 @@ class App(customtkinter.CTk):
         self.plansza = self.joystick_board.create_image(0, 0, image=self.bgphoto, anchor=NW)
 
         self.photoimage = PhotoImage(file='test_images//kontroler.png')
-        self.joystick_steering_label = self.joystick_board.create_image(0,0,image=self.photoimage, anchor=NW)
+        self.joystick_steering_label = self.joystick_board.create_image(0, 0, image=self.photoimage, anchor=NW)
         self.joystick_board.moveto(self.joystick_steering_label, 115, 115)
 
         self.joystick_height = self.photoimage.height()
@@ -206,48 +206,40 @@ class App(customtkinter.CTk):
 
     def drag_start(self, event):
         self.coordinates = self.joystick_board.coords(self.joystick_steering_label)
-        self.oldx = event.x
-        self.oldy = event.y
+        self.x_pos = event.x
+        self.y_pos = event.y
 
     # złapanie obiektu myszką
 
     def drag_motion(self, event):
-        winX = event.x
-        winY = event.y
+        win_x = event.x
+        win_y = event.y
 
-        x = self.coordinates[0] - self.oldx + event.x
-        y = self.coordinates[1] - self.oldy + event.y
+        x = self.coordinates[0] - self.x_pos + event.x
+        y = self.coordinates[1] - self.y_pos + event.y
 
-
-        if x<0 :
-
+        if x < 0:
             x = 0
-        elif x>250:
 
+        elif x > 250:
             x = 250
+
         else:
-            self.oldx = winX
+            self.x_pos = win_x
 
-        if y<0 :
-
+        if y < 0:
             y = 0
-        elif y>250:
 
+        elif y > 250:
             y = 250
+
         else:
-            self.oldy = winY
-
-
-
+            self.y_pos = win_y
 
         # obsługa przesuwania obiektu w naszym układzie wspl
-
         self.joystick_board.moveto(self.joystick_steering_label, x, y)
-
         self.coordinates = self.joystick_board.coords(self.joystick_steering_label)
-
         print(self.coordinates)
-
 
         #self.speed_data[0] = x-162
         #self.speed_data[1] = (y-135)*(-1)
