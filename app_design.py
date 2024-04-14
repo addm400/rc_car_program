@@ -104,23 +104,23 @@ class App(customtkinter.CTk):
 
         # create third frame
 
-        self.canvas_height = 275
-        self.canvas_width = 110
+        self.canvas_height = 270
+        self.canvas_width = 100
         self.dragInfo_x = 0
         self.dragInfo_y = 0
         self.coordinates = []
 
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
-        self.joystick_board = Canvas(self.third_frame, width=self.canvas_width, height=self.canvas_height)
+        self.joystick_board = Canvas(self.third_frame, width=self.canvas_width, height=self.canvas_height, bg="black")
         self.joystick_board.grid(row=0, column=0, pady=(20, 0), padx=(20, 140), sticky="nsew")
 
-        self.bgphoto = PhotoImage(file='test_images//plansza.png')
+        self.bgphoto = PhotoImage(file='test_images//arrows_2.png')
         self.plansza = self.joystick_board.create_image(0, 0, image=self.bgphoto, anchor=NW)
 
-        self.photoimage = PhotoImage(file='test_images//kontroler.png')
+        self.photoimage = PhotoImage(file='test_images//kolko.png')
         self.joystick_steering_label = self.joystick_board.create_image(0, 0, image=self.photoimage, anchor=NW)
-        self.joystick_board.moveto(self.joystick_steering_label, 115, 115)
+        self.joystick_board.moveto(self.joystick_steering_label, 98, 97)
 
         self.joystick_height = self.photoimage.height()
         self.joystick_width = self.photoimage.width()
@@ -228,8 +228,8 @@ class App(customtkinter.CTk):
         if x < 0:
             x = 0
 
-        elif x > 250:
-            x = 250
+        elif x > 195:
+            x = 195
 
         else:
             self.x_pos = win_x
@@ -237,8 +237,8 @@ class App(customtkinter.CTk):
         if y < 0:
             y = 0
 
-        elif y > 250:
-            y = 250
+        elif y > 195:
+            y = 195
 
         else:
             self.y_pos = win_y
@@ -255,7 +255,7 @@ class App(customtkinter.CTk):
 
     def dropped(self, event):
 
-        self.joystick_board.moveto(self.joystick_steering_label, 115, 115)
+        self.joystick_board.moveto(self.joystick_steering_label, 98, 97)
 
         self.speed_data[0] = 180
         self.speed_data[1] = 0
