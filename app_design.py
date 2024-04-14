@@ -206,50 +206,57 @@ class App(customtkinter.CTk):
 
     def drag_start(self, event):
         self.coordinates = self.joystick_board.coords(self.joystick_steering_label)
-        self.oldx = self.dragInfo_x = event.x
-        self.oldy = self.dragInfo_y = event.y
+        self.oldx = event.x
+        self.oldy = event.y
 
     # złapanie obiektu myszką
 
     def drag_motion(self, event):
         winX = event.x
         winY = event.y
-        newX = winX - self.dragInfo_x
-        newY = winY - self.dragInfo_y
 
         x = self.coordinates[0] - self.oldx + event.x
         y = self.coordinates[1] - self.oldy + event.y
 
 
-        if x >= self.canvas_height - self.joystick_height or x<0:
-            newX = 0
+        if x<0 :
+
+            x = 0
+        elif x>250:
+
+            x = 250
         else:
             self.oldx = winX
 
-        if y >= self.canvas_height - self.joystick_height or y<0:
-            newY = 0
+        if y<0 :
+
+            y = 0
+        elif y>250:
+
+            y = 250
         else:
             self.oldy = winY
 
 
+
+
         # obsługa przesuwania obiektu w naszym układzie wspl
-        self.joystick_board.move(self.joystick_steering_label, newX, newY)
-        self.dragInfo_x = winX
-        self.dragInfo_y = winY
+
+        self.joystick_board.moveto(self.joystick_steering_label, x, y)
+
         self.coordinates = self.joystick_board.coords(self.joystick_steering_label)
+
         print(self.coordinates)
 
 
         #self.speed_data[0] = x-162
         #self.speed_data[1] = (y-135)*(-1)
         #self.speed_data_conversion()
+        """moze trzeba dodać zabezpieczenie że jeżeli za mocno przeciągniemy to joystick wraca do jakiejs pozcyji"""
 
     def dropped(self, event):
 
         self.joystick_board.moveto(self.joystick_steering_label, 115, 115)
-
-        self.dragInfo_x = 0
-        self.dragInfo_y = 0
 
         self.speed_data[0] = 180
         self.speed_data[1] = 0
