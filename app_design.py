@@ -259,36 +259,28 @@ class App(customtkinter.CTk):
 
         if x < 0:
             x = 0
-
         elif x > self.joystick_database['end_value']:
             x = self.joystick_database['end_value']
-
         else:
             self.x_pos = win_x
 
         if y < 0:
             y = 0
-
         elif y > self.joystick_database['end_value']:
             y = self.joystick_database['end_value']
-
         else:
             self.y_pos = win_y
 
         # obsługa przesuwania obiektu w naszym układzie wspl
         self.joystick_board.moveto(self.joystick_steering_label, x, y)
         self.coordinates = self.joystick_board.coords(self.joystick_steering_label)
-
         self.coordinates[0] = int(self.coordinates[0])
         self.coordinates[1] = int(self.coordinates[1])
 
         new_speed = self.conv_sys.axis_conversion(self.coordinates, self.scaleFactor)
-        #new_speed = self.conv_sys.speed_data_conversion()
-        #print(new_speed)
+
         self.speed_data[0] = new_speed["x_speed"]
         self.speed_data[1] = new_speed["y_speed"]
-        #print(self.coordinates)
-
 
     def dropped(self, event):
         self.joystick_board.moveto(self.joystick_steering_label,
