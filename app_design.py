@@ -23,12 +23,15 @@ class App(customtkinter.CTk):
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
 
-        self.database = {
-            "board_size_100": 275, "board_size_125": 275,
-            "board_size_150": 430, "board_size_175": 420,
+        self.image_database = {
+            "board_size_100": 275,
+            "board_size_150": 436,
+        }
+
+        self.canvas_database = {
             "canvas_width_100": 102, "canvas_height_100": 275,
-            "canvas_width_125": 275, "canvas_height_125": 275,
-            "canvas_width_150": 140, "canvas_height_150": 415,
+            "canvas_width_150": 119, "canvas_height_150": 436,
+
         }
 
         # load images with light and dark mode image
@@ -127,15 +130,15 @@ class App(customtkinter.CTk):
 
         self.canvas_height = int(self.canvas_height*self.scaleFactor)
 
-        self.joystick_board = Canvas(self.third_frame, width=self.database["canvas_width_100"],
-                                     height=self.database["canvas_height_100"], highlightthickness=0)
+        self.joystick_board = Canvas(self.third_frame, width=self.canvas_database["canvas_width_100"],
+                                     height=self.canvas_database["canvas_height_100"], highlightthickness=0)
         self.joystick_board.grid(row=0, column=0, pady=(20, 0), padx=(20, 140), sticky="nsew")
 
         #self.strzalki_size = [300, 300]
 
 
         self.strzalki = Image.open('test_images//arrows.png')
-        self.strzalki = self.strzalki.resize((self.database["board_size_100"], self.database["board_size_100"]))
+        self.strzalki = self.strzalki.resize((self.image_database["board_size_100"], self.image_database["board_size_100"]))
         self.scaling_image()
         self.bgphoto = ImageTk.PhotoImage(self.strzalki)
         self.plansza = self.joystick_board.create_image(0, 0, image=self.bgphoto, anchor=NW)
@@ -378,8 +381,11 @@ class App(customtkinter.CTk):
 
     def scaling_image(self):
         if self.scaleFactor == 1.5:
-            self.joystick_board.configure(width=self.database["canvas_width_150"], height=self.database["canvas_height_150"])
-            self.strzalki = self.strzalki.resize((self.database["board_size_150"], self.database["board_size_150"]))
+            self.joystick_board.configure(width=self.canvas_database["canvas_width_150"],
+                                          height=self.canvas_database["canvas_height_150"])
+
+            self.strzalki = self.strzalki.resize((self.image_database["board_size_150"],
+                                                  self.image_database["board_size_150"]))
 
 
 
