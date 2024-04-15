@@ -294,9 +294,9 @@ class App(customtkinter.CTk):
         self.coordinates[0] = int(self.coordinates[0])
         self.coordinates[1] = int(self.coordinates[1])
 
-        print(self.coordinates)
-        #self.axis_conversion(self.coordinates)
-        #self.speed_data_conversion()
+        #print(self.coordinates)
+        self.axis_conversion(self.coordinates)
+        self.speed_data_conversion()
 
     def dropped(self, event):
         self.joystick_board.moveto(self.joystick_steering_label,
