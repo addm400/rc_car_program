@@ -114,11 +114,15 @@ class App(customtkinter.CTk):
 
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
+        # getting current scale factor of windows itself
+        self.scaleFactor = ctypes.windll.shcore.GetScaleFactorForDevice(0) / 100
+        self.canvas_height = int(self.canvas_height*self.scaleFactor)
+
         self.joystick_board = Canvas(self.third_frame, width=self.canvas_width, height=self.canvas_height, highlightthickness=0)
         self.joystick_board.grid(row=0, column=0, pady=(20, 0), padx=(20, 140), sticky="nsew")
 
         self.strzalki = Image.open('test_images//arrows.png')
-        self.strzalki = self.strzalki.resize((300, 300))
+        self.strzalki = self.strzalki.resize((int(self.scaleFactor*300), int(self.scaleFactor*300)))
         self.bgphoto = ImageTk.PhotoImage(self.strzalki)
         self.plansza = self.joystick_board.create_image(0, 0, image=self.bgphoto, anchor=NW)
 
@@ -166,8 +170,8 @@ class App(customtkinter.CTk):
                                                                command=self.change_scaling_event)
         self.scaling_optionemenu.grid(row=8, column=0, padx=20, pady=(10, 20))
 
-        # getting current scale factor of windows itself
-        self.scaleFactor = ctypes.windll.shcore.GetScaleFactorForDevice(0) / 100
+
+
         print(self.scaleFactor)
 
     def select_frame_by_name(self, name):
