@@ -39,6 +39,7 @@ class App(customtkinter.CTk):
         self.joystick_database = {
             "x_home": 98,
             "y_home": 97,
+            "end_value": 195
 
         }
 
@@ -274,8 +275,8 @@ class App(customtkinter.CTk):
         if x < 0:
             x = 0
 
-        elif x > 195:
-            x = 195
+        elif x > self.joystick_database['end_value']:
+            x = self.joystick_database['end_value']
 
         else:
             self.x_pos = win_x
@@ -283,8 +284,8 @@ class App(customtkinter.CTk):
         if y < 0:
             y = 0
 
-        elif y > 195:
-            y = 195
+        elif y > self.joystick_database['end_value']:
+            y = self.joystick_database['end_value']
 
         else:
             self.y_pos = win_y
@@ -409,6 +410,8 @@ class App(customtkinter.CTk):
 
             self.joystick_database["x_home"] = 157
             self.joystick_database["y_home"] = 156
+
+            self.joystick_database['end_value'] = 316
 
 
 
