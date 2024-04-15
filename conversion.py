@@ -63,3 +63,4 @@ class ConversionSys:
         na wartości odpowiadające sterowaniu silnika (krokowego)
         skręt kół lewo-prawo, aktualny zakres: 120 - 240 (stopni)
         """
+        return self.velocity
