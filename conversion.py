@@ -9,20 +9,36 @@ class ConversionSys:
             "y_speed": 0
         }
 
-    def axis_conversion(self, coords):
-        if coords[0] < 98:
-            self.velocity["x_speed"] = coords[0] - 97
-        if coords[0] > 98:
-            self.velocity["x_speed"] = coords[0] - 98
-        if coords[0] == 98:
+        self.axis_value = {"end_value": 98}
+
+    def scale_check(self, scale):
+        if scale == 1:
+            self.axis_value["end_value"] = 98
+        if scale == 1.5:
+            self.axis_value["end_value"] = 98
+
+    def axis_conversion(self, coords, scale):
+
+        self.scale_check(scale)
+
+        if coords[0] < self.axis_value["end_value"]:
+            self.velocity["x_speed"] = coords[0] - self.axis_value["end_value"]
+        if coords[0] > self.axis_value["end_value"]:
+            self.velocity["x_speed"] = coords[0] - self.axis_value["end_value"]
+        if coords[0] == self.axis_value["end_value"]:
             self.velocity["x_speed"] = 0
 
-        if coords[1] < 98:
-            self.velocity["y_speed"] = -coords[1] + 97
-        if coords[1] > 98:
-            self.velocity["y_speed"] = -(coords[1] - 98)
-        if coords[1] == 98:
+        if coords[1] < self.axis_value["end_value"]:
+            self.velocity["y_speed"] = -coords[1] + self.axis_value["end_value"]
+        if coords[1] > self.axis_value["end_value"]:
+            self.velocity["y_speed"] = -(coords[1] - self.axis_value["end_value"])
+        if coords[1] == self.axis_value["end_value"]:
             self.velocity["y_speed"] = 0
+
+        if scale == 1:
+            return self.speed_data_conversion()
+        if scale == 1.5:
+            return self.speed_data_conversion()
 
     # function to convert units from axes (joystick) into real car control values
     def speed_data_conversion(self):

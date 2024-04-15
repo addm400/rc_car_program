@@ -282,8 +282,8 @@ class App(customtkinter.CTk):
         self.coordinates[0] = int(self.coordinates[0])
         self.coordinates[1] = int(self.coordinates[1])
 
-        self.conv_sys.axis_conversion(self.coordinates)
-        new_speed = self.conv_sys.speed_data_conversion()
+        new_speed = self.conv_sys.axis_conversion(self.coordinates, self.scaleFactor)
+        #new_speed = self.conv_sys.speed_data_conversion()
         #print(new_speed)
         self.speed_data[0] = new_speed["x_speed"]
         self.speed_data[1] = new_speed["y_speed"]
