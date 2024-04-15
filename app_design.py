@@ -2,7 +2,9 @@ import customtkinter
 import tkinter
 from tkinter import *
 import os
-from PIL import Image
+from PIL import Image, ImageTk
+import ctypes
+
 
 """
 Main file for RC control car program 
@@ -114,12 +116,14 @@ class App(customtkinter.CTk):
 
         self.joystick_board = Canvas(self.third_frame, width=self.canvas_width, height=self.canvas_height, highlightthickness=0)
         self.joystick_board.grid(row=0, column=0, pady=(20, 0), padx=(20, 140), sticky="nsew")
-        
-        self.bgphoto = PhotoImage(file='test_images//arrows.png')
+
+        self.strzalki = Image.open('test_images//arrows.png')
+        self.strzalki = self.strzalki.resize((300, 300))
+        self.bgphoto = ImageTk.PhotoImage(self.strzalki)
         self.plansza = self.joystick_board.create_image(0, 0, image=self.bgphoto, anchor=NW)
 
         self.photoimage = PhotoImage(file='test_images//kolko.png')
-        self.joystick_steering_label = self.joystick_board.create_image(0, 0, image=self.keyboard_image, anchor=NW)
+        self.joystick_steering_label = self.joystick_board.create_image(0, 0, image=self.photoimage, anchor=NW)
         self.joystick_board.moveto(self.joystick_steering_label, 98, 97)
 
         self.joystick_height = self.photoimage.height()
@@ -150,7 +154,7 @@ class App(customtkinter.CTk):
         self.bind("<KeyRelease>", self.key_release)
 
         # starting periodic function to pass data
-        self.alarm = self.after(100, self.printer)
+        #self.alarm = self.after(100, self.printer)
 
         # tab for holding which window is currently displayed (1/2/3)
         self.which_window = [1]
@@ -161,6 +165,10 @@ class App(customtkinter.CTk):
                                                                values=["80%", "90%", "100%", "110%", "120%"],
                                                                command=self.change_scaling_event)
         self.scaling_optionemenu.grid(row=8, column=0, padx=20, pady=(10, 20))
+
+        # getting current scale factor of windows itself
+        self.scaleFactor = ctypes.windll.shcore.GetScaleFactorForDevice(0) / 100
+        print(self.scaleFactor)
 
     def select_frame_by_name(self, name):
         # set button color for selected button
