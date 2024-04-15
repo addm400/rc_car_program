@@ -36,6 +36,12 @@ class App(customtkinter.CTk):
 
         }
 
+        self.joystick_database = {
+            "x_home": 98,
+            "y_home": 97,
+
+        }
+
         # load images with light and dark mode image
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "test_images")
         self.logo_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "icon.png")), size=(45, 30))
@@ -154,7 +160,8 @@ class App(customtkinter.CTk):
 
         #self.photoimage = PhotoImage(file='test_images//kolko.png')
         #self.joystick_steering_label = self.joystick_board.create_image(0, 0, image=self.photoimage, anchor=NW)
-        self.joystick_board.moveto(self.joystick_steering_label, 98, 97)
+        self.joystick_board.moveto(self.joystick_steering_label,
+                                   self.joystick_database["x_home"], self.joystick_database["y_home"])
 
         #self.joystick_height = self.photoimage.height()
         #self.joystick_width = self.photoimage.width()
@@ -295,7 +302,8 @@ class App(customtkinter.CTk):
 
     def dropped(self, event):
 
-        self.joystick_board.moveto(self.joystick_steering_label, 98, 97)
+        self.joystick_board.moveto(self.joystick_steering_label,
+                                   self.joystick_database["x_home"], self.joystick_database["y_home"])
 
         self.speed_data[0] = 180
         self.speed_data[1] = 0
@@ -398,6 +406,9 @@ class App(customtkinter.CTk):
 
             self.kolko = self.kolko.resize((self.image_database["joystick_size_150"],
                                             self.image_database["joystick_size_150"]))
+
+            self.joystick_database["x_home"] = 157
+            self.joystick_database["y_home"] = 156
 
 
 
