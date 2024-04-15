@@ -126,11 +126,11 @@ class App(customtkinter.CTk):
 
         # create third frame
 
-        self.canvas_height = 275
-        self.canvas_width = 102
+        #self.canvas_height = 275
+        #self.canvas_width = 102
         self.dragInfo_x = 0
         self.dragInfo_y = 0
-        self.coordinates = []
+        #self.coordinates = []
 
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
@@ -204,10 +204,7 @@ class App(customtkinter.CTk):
                                                                command=self.change_scaling_event)
         self.scaling_optionemenu.grid(row=8, column=0, padx=20, pady=(10, 20))
 
-
         print(self.scaleFactor)
-
-
 
     def select_frame_by_name(self, name):
         # set button color for selected button
@@ -260,7 +257,7 @@ class App(customtkinter.CTk):
 
     def drag_start(self, event):
         self.coordinates = self.joystick_board.coords(self.joystick_steering_label)
-        self.x_pos = event.x
+        self.x_pos = event.x  # tutej gdzieś można dopisać lnijke ktora usunałęm, może jostick nie bedzie uciekał
         self.y_pos = event.y
 
     # złapanie obiektu myszką
@@ -300,9 +297,7 @@ class App(customtkinter.CTk):
         self.axis_conversion(self.coordinates)
         self.speed_data_conversion()
 
-
     def dropped(self, event):
-
         self.joystick_board.moveto(self.joystick_steering_label,
                                    self.joystick_database["x_home"], self.joystick_database["y_home"])
 
