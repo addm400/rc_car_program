@@ -26,6 +26,8 @@ class App(customtkinter.CTk):
         self.image_database = {
             "board_size_100": 275,
             "board_size_150": 436,
+            "joystick_size_100": 80,
+            "joystick_size_150": 120,
         }
 
         self.canvas_database = {
@@ -128,27 +130,34 @@ class App(customtkinter.CTk):
         # getting current scale factor of windows itself
         self.scaleFactor = (ctypes.windll.shcore.GetScaleFactorForDevice(0) / 100)
 
-        self.canvas_height = int(self.canvas_height*self.scaleFactor)
+        #self.canvas_height = int(self.canvas_height*self.scaleFactor)
 
         self.joystick_board = Canvas(self.third_frame, width=self.canvas_database["canvas_width_100"],
                                      height=self.canvas_database["canvas_height_100"], highlightthickness=0)
         self.joystick_board.grid(row=0, column=0, pady=(20, 0), padx=(20, 140), sticky="nsew")
 
-        #self.strzalki_size = [300, 300]
-
-
         self.strzalki = Image.open('test_images//arrows.png')
         self.strzalki = self.strzalki.resize((self.image_database["board_size_100"], self.image_database["board_size_100"]))
+
+        self.kolko = Image.open('test_images//kolko.png')
+        self.kolko = self.kolko.resize((self.image_database["joystick_size_100"], self.image_database["joystick_size_100"]))
+
         self.scaling_image()
+
         self.bgphoto = ImageTk.PhotoImage(self.strzalki)
         self.plansza = self.joystick_board.create_image(0, 0, image=self.bgphoto, anchor=NW)
 
-        self.photoimage = PhotoImage(file='test_images//kolko.png')
-        self.joystick_steering_label = self.joystick_board.create_image(0, 0, image=self.photoimage, anchor=NW)
+        self.analog = ImageTk.PhotoImage(self.kolko)
+        self.joystick_steering_label = self.joystick_board.create_image(0, 0, image=self.analog, anchor=NW)
+
+
+
+        #self.photoimage = PhotoImage(file='test_images//kolko.png')
+        #self.joystick_steering_label = self.joystick_board.create_image(0, 0, image=self.photoimage, anchor=NW)
         self.joystick_board.moveto(self.joystick_steering_label, 98, 97)
 
-        self.joystick_height = self.photoimage.height()
-        self.joystick_width = self.photoimage.width()
+        #self.joystick_height = self.photoimage.height()
+        #self.joystick_width = self.photoimage.width()
 
         self.joystick_board.tag_bind(self.joystick_steering_label, "<Button-1>", self.drag_start)
         self.joystick_board.tag_bind(self.joystick_steering_label, "<B1-Motion>", self.drag_motion)
@@ -386,6 +395,9 @@ class App(customtkinter.CTk):
 
             self.strzalki = self.strzalki.resize((self.image_database["board_size_150"],
                                                   self.image_database["board_size_150"]))
+
+            self.kolko = self.kolko.resize((self.image_database["joystick_size_150"],
+                                            self.image_database["joystick_size_150"]))
 
 
 
