@@ -51,8 +51,6 @@ class App(customtkinter.CTk):
         self.chat_image = customtkinter.CTkImage(dark_image=Image.open(os.path.join(image_path, "keyboard_pic.png")), size=(20, 20))
         self.add_user_image = customtkinter.CTkImage(dark_image=Image.open(os.path.join(image_path, "joystick_pic.png")), size=(20, 20))
         self.keyboard_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "strzalki.png")), size=(251, 242))
-        #self.board = customtkinter.CTkImage(Image.open(os.path.join(image_path, "plansza.png")), size=(280, 280))
-        #self.analog = customtkinter.CTkImage(Image.open(os.path.join(image_path, "kolko.png")), size=(50, 50))
 
         # create navigation frame
         self.navigation_frame = customtkinter.CTkFrame(self, corner_radius=0)
@@ -126,19 +124,13 @@ class App(customtkinter.CTk):
         self.radio_button_3.grid(row=3, column=2, pady=10, padx=(76, 0), sticky="n")
 
         # create third frame
-
-        #self.canvas_height = 275
-        #self.canvas_width = 102
         self.dragInfo_x = 0
         self.dragInfo_y = 0
-        #self.coordinates = []
 
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
         # getting current scale factor of windows itself
         self.scaleFactor = (ctypes.windll.shcore.GetScaleFactorForDevice(0) / 100)
-
-        #self.canvas_height = int(self.canvas_height*self.scaleFactor)
 
         self.joystick_board = Canvas(self.third_frame, width=self.canvas_database["canvas_width_100"],
                                      height=self.canvas_database["canvas_height_100"], highlightthickness=0)
@@ -158,15 +150,8 @@ class App(customtkinter.CTk):
         self.analog = ImageTk.PhotoImage(self.kolko)
         self.joystick_steering_label = self.joystick_board.create_image(0, 0, image=self.analog, anchor=NW)
 
-
-
-        #self.photoimage = PhotoImage(file='test_images//kolko.png')
-        #self.joystick_steering_label = self.joystick_board.create_image(0, 0, image=self.photoimage, anchor=NW)
         self.joystick_board.moveto(self.joystick_steering_label,
                                    self.joystick_database["x_home"], self.joystick_database["y_home"])
-
-        #self.joystick_height = self.photoimage.height()
-        #self.joystick_width = self.photoimage.width()
 
         self.joystick_board.tag_bind(self.joystick_steering_label, "<Button-1>", self.drag_start)
         self.joystick_board.tag_bind(self.joystick_steering_label, "<B1-Motion>", self.drag_motion)
@@ -303,8 +288,7 @@ class App(customtkinter.CTk):
         self.speed_data[0] = new_speed["x_speed"]
         self.speed_data[1] = new_speed["y_speed"]
         #print(self.coordinates)
-        #self.axis_conversion(self.coordinates)
-        #self.speed_data_conversion()
+
 
     def dropped(self, event):
         self.joystick_board.moveto(self.joystick_steering_label,
@@ -341,65 +325,9 @@ class App(customtkinter.CTk):
         print(self.speed_data)
         self.alarm = self.after(10, self.printer)
 
-    # function to convert units from axes (joystick) into real car control values
-    def speed_data_conversion(self):
-
-        if 15 < self.speed_data[1] < 85:
-            self.speed_data[1] = 2*self.speed_data[1] + 44
-        elif -15 > self.speed_data[1] > -85:
-            self.speed_data[1] = 2*self.speed_data[1] - 44
-
-        elif 15 > self.speed_data[1] >= 0:
-            self.speed_data[1] = 0
-        elif -15 < self.speed_data[1] <= 0:
-            self.speed_data[1] = 0
-
-        elif self.speed_data[1] > 85:
-            self.speed_data[1] = 214
-        elif self.speed_data[1] < -85:
-            self.speed_data[1] = -214
-        """
-        1 część zrobiona aby przekształcić dane zebrane z osi Y
-        na wartości odpowiadające sterowaniu silnika (DC 3V/6V)
-        ruch przód-tył, aktualny zakres: 92 - 208
-        """
-
-        if 15 < self.speed_data[0] < 81:
-            self.speed_data[0] = self.speed_data[0] + 165
-        elif -15 > self.speed_data[0] > -81:
-            self.speed_data[0] = self.speed_data[0] + 195
-
-        elif 15 > self.speed_data[0] > -15:
-            self.speed_data[0] = 180
-
-        elif self.speed_data[0] > 81:
-            self.speed_data[0] = 240
-        elif self.speed_data[0] < -81:
-            self.speed_data[0] = 120
-        """
-        2 część zrobiona aby przekształcić dane zebrane z osi X
-        na wartości odpowiadające sterowaniu silnika (krokowego)
-        skręt kół lewo-prawo, aktualny zakres: 120 - 240 (stopni)
-        """
-
     def change_scaling_event(self, new_scaling: str):
         new_scaling_float = int(new_scaling.replace("%", "")) / 100
         customtkinter.set_widget_scaling(new_scaling_float)
-
-    def axis_conversion(self, tab):
-        if tab[0] < 98:
-            self.speed_data[0] = self.coordinates[0] - 97
-        if tab[0] > 98:
-            self.speed_data[0] = self.coordinates[0] - 98
-        if tab[0] == 98:
-            self.speed_data[0] = 0
-
-        if tab[1] < 98:
-            self.speed_data[1] = -self.coordinates[1] + 97
-        if tab[1] > 98:
-            self.speed_data[1] = -(self.coordinates[1] - 98)
-        if tab[1] == 98:
-            self.speed_data[1] = 0
 
     def scaling_image(self):
         if self.scaleFactor == 1.5:
@@ -416,7 +344,4 @@ class App(customtkinter.CTk):
             self.joystick_database["y_home"] = 156
 
             self.joystick_database['end_value'] = 316
-
-
-
 

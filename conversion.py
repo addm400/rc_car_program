@@ -24,6 +24,7 @@ class ConversionSys:
         if coords[1] == 98:
             self.velocity["y_speed"] = 0
 
+    # function to convert units from axes (joystick) into real car control values
     def speed_data_conversion(self):
 
         if 15 < self.velocity["y_speed"] < 85:
