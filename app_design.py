@@ -115,14 +115,18 @@ class App(customtkinter.CTk):
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
         # getting current scale factor of windows itself
-        self.scaleFactor = ctypes.windll.shcore.GetScaleFactorForDevice(0) / 100
+        self.scaleFactor = (ctypes.windll.shcore.GetScaleFactorForDevice(0) / 100)
+
         self.canvas_height = int(self.canvas_height*self.scaleFactor)
 
         self.joystick_board = Canvas(self.third_frame, width=self.canvas_width, height=self.canvas_height, highlightthickness=0)
         self.joystick_board.grid(row=0, column=0, pady=(20, 0), padx=(20, 140), sticky="nsew")
 
+        self.strzalki_size = [300,300]
+        self.scaling_image()
+
         self.strzalki = Image.open('test_images//arrows.png')
-        self.strzalki = self.strzalki.resize((int(self.scaleFactor*300), int(self.scaleFactor*300)))
+        self.strzalki = self.strzalki.resize((self.strzalki_size[0], self.strzalki_size[1]))
         self.bgphoto = ImageTk.PhotoImage(self.strzalki)
         self.plansza = self.joystick_board.create_image(0, 0, image=self.bgphoto, anchor=NW)
 
@@ -360,5 +364,13 @@ class App(customtkinter.CTk):
             self.speed_data[1] = -(self.coordinates[1] - 98)
         if tab[1] == 98:
             self.speed_data[1] = 0
+
+    def scaling_image(self):
+        if self.scaleFactor == 1:
+            self.strzalki_size = [275, 275]
+        elif self.scaleFactor == 1.5:
+            self.strzalki_size = [428, 412]
+
+
 
 
