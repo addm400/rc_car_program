@@ -4,6 +4,7 @@ from tkinter import *
 import os
 from PIL import Image, ImageTk
 import ctypes
+from conversion import *
 
 
 """
@@ -192,7 +193,7 @@ class App(customtkinter.CTk):
         self.bind("<KeyRelease>", self.key_release)
 
         # starting periodic function to pass data
-        #self.alarm = self.after(100, self.printer)
+        self.alarm = self.after(100, self.printer)
 
         # tab for holding which window is currently displayed (1/2/3)
         self.which_window = [1]
@@ -203,6 +204,8 @@ class App(customtkinter.CTk):
                                                                values=["80%", "90%", "100%", "110%", "120%"],
                                                                command=self.change_scaling_event)
         self.scaling_optionemenu.grid(row=8, column=0, padx=20, pady=(10, 20))
+
+        self.conv_sys = ConversionSys()
 
         #print(self.scaleFactor)
 
@@ -294,9 +297,14 @@ class App(customtkinter.CTk):
         self.coordinates[0] = int(self.coordinates[0])
         self.coordinates[1] = int(self.coordinates[1])
 
+        self.conv_sys.axis_conversion(self.coordinates)
+        new_speed = self.conv_sys.speed_data_conversion()
+        #print(new_speed)
+        self.speed_data[0] = new_speed["x_speed"]
+        self.speed_data[1] = new_speed["y_speed"]
         #print(self.coordinates)
-        self.axis_conversion(self.coordinates)
-        self.speed_data_conversion()
+        #self.axis_conversion(self.coordinates)
+        #self.speed_data_conversion()
 
     def dropped(self, event):
         self.joystick_board.moveto(self.joystick_steering_label,
