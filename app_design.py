@@ -174,9 +174,15 @@ class App(customtkinter.CTk):
                                                                command=self.change_scaling_event)
         self.scaling_optionemenu.grid(row=8, column=0, padx=20, pady=(10, 20))
 
-
-
         print(self.scaleFactor)
+
+        self.database = {
+            "board_size_100": 275, "board_size_125": 275,
+            "board_size_150": 420, "board_size_175": 420,
+            "canvas_width_100": 275, "canvas_height_100": 275,
+            "canvas_width_125": 275, "canvas_height_125": 275,
+            "canvas_width_150": 275, "canvas_height_150": 275,
+        }
 
     def select_frame_by_name(self, name):
         # set button color for selected button
