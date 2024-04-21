@@ -2,9 +2,10 @@ import serial
 import time
 
 print("Start")
-port="COM4" #This will be different for various devices and on windows it will probably be a COM port.
+port="COM6" #This will be different for various devices and on windows it will probably be a COM port.
 bluetooth=serial.Serial(port, 9600)#Start communications with the bluetooth unit
 print("Connected")
+time.sleep(1)
 bluetooth.flushInput() #This gives the bluetooth a little kick
 
 for i in range(5): #send 5 groups of data to the bluetooth
@@ -17,6 +18,7 @@ for i in range(5): #send 5 groups of data to the bluetooth
     time.sleep(0.1) #A pause between bursts
 
 bluetooth.write(b"LED OFF") #Turn Off the LED, but no answer back from Bluetooth will be printed by python
+time.sleep(100)
 
 bluetooth.close() #Otherwise the connection will remain open until a timeout which ties up the /dev/thingamabob
 print("Done")
