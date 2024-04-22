@@ -25,7 +25,7 @@ class Blut:
             for j in range(3):
                 print('.', end="")
                 time.sleep(0.5)
-            print('\n')
+            print("")
             time.sleep(0.5)
         print("*****CONNECTED*****")
         time.sleep(1)
