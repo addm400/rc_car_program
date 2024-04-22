@@ -1,25 +1,51 @@
 import serial
 import time
 
-print("Start")
-port = "COM6"  # This will be different for various devices and on windows it will probably be a COM port.
-bluetooth = serial.Serial(port, 9600)  # Start communications with the bluetooth unit
-print("Connected")
-time.sleep(1)
-# bluetooth.flushInput() #This gives the bluetooth a little kick
 
-# send 5 groups of data to the bluetooth
-for i in range(5):
-    if i == 0:
-        bluetooth.write(b"LED ON")  # Turn Off the LED
-    else:
-        bluetooth.write(b"DATA shit "+str.encode(str(i)))  # These need to be bytes not unicode, plus a number
-    input_data = bluetooth.readline()  # This reads the incoming data. In this particular example it will be the "Bluetooth answers" line
-    print(input_data.decode())  # These are bytes coming in so decode is needed
-    time.sleep(0.1)  # A pause between bursts
+class Blut:
+    def __init__(self):
+        super().__init__()
 
-bluetooth.write(b"LED OFF")  # Turn Off the LED, but no answer back from Bluetooth will be printed by python
-time.sleep(10)
+        self.data = {
+            "x_speed": 180,
+            "y_speed": 0,
+            "port": "0"
+        }
 
-bluetooth.close()  # Otherwise the connection will remain open until a timeout which ties up the /dev/thingamabob
-print("Done")
+        self.blueooth = None
+        self.input_data = None
+
+    def define_port(self, port_value):
+        self.data['port'] = port_value
+
+    def start_connection(self):
+        print("\n*****CONNECTION STARTED*****")
+        self.blueooth = serial.Serial(self.data['port'], 9600)
+        for i in range(3):
+            for j in range(3):
+                print('.', end="")
+                time.sleep(0.5)
+            print('\n')
+            time.sleep(0.5)
+        print("*****CONNECTED*****")
+        time.sleep(1)
+
+    def transmission(self):
+
+        while True:
+            self.blueooth.write(str.encode(str(self.data['x_speed'])) + b", "
+                                + str.encode(str(self.data['y_speed'])))
+
+            self.input_data = self.blueooth.readline()
+            print(self.input_data.decode())
+            time.sleep(0.01)
+
+
+bluczus = Blut()
+bluczus.define_port("COM6")
+bluczus.start_connection()
+bluczus.transmission()
+
+
+
+
