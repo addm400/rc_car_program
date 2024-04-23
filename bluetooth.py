@@ -30,14 +30,13 @@ class Blut:
             time.sleep(0.5)
         print("*****CONNECTED*****")
         time.sleep(1)
+        self.board_setup()
 
     def board_setup(self):
         pass
         self.board.digital[self.pin3].mode = SERVO
 
     def transmission(self):
-
-        #speed = self.data['y']
 
         for i in range(5):
             speed = 90
@@ -51,7 +50,6 @@ class Blut:
 bluczus = Blut()
 bluczus.define_port("COM6")
 bluczus.start_connection()
-bluczus.board_setup()
 bluczus.transmission()
 print('done')
 
