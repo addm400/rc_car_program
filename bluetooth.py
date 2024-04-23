@@ -1,21 +1,57 @@
 from pyfirmata2 import Arduino, SERVO
 import time
 
-board = Arduino('COM6')
-print('connected')
-pin = 3
-board.digital[pin].mode = SERVO
-board.digital[pin].write(90)
-time.sleep(1)
-board.digital[pin].write(80)
-time.sleep(0.5)
-board.digital[pin].write(60)
-time.sleep(0.5)
-board.digital[pin].write(40)
-time.sleep(0.5)
-board.digital[pin].write(20)
-time.sleep(0.5)
-time.sleep(8)
-board.digital[pin].write(90)
+
+class Blut:
+    def __init__(self):
+        super().__init__()
+
+        self.data = {
+            "x": 180,
+            "y": 90,
+            "port": "0"
+        }
+
+        self.pin3 = 3
+        self.board = None
+        self.input_data = None  # dorzucić otrzymywanie informacji zwrotnej
+
+    def define_port(self, port_value):
+        self.data['port'] = port_value
+
+    def start_connection(self):
+        print("\n*****CONNECTION STARTED*****")
+        self.board = Arduino(self.data['port'])
+        for i in range(3):
+            for j in range(3):
+                print('.', end="")
+                time.sleep(0.5)
+            print("")
+            time.sleep(0.5)
+        print("*****CONNECTED*****")
+        time.sleep(1)
+
+    def board_setup(self):
+        pass
+        self.board.digital[self.pin3].mode = SERVO
+
+    def transmission(self):
+
+        #speed = self.data['y']
+
+        for i in range(5):
+            speed = 90
+            for j in range(8):
+                self.board.digital[self.pin3].write(speed)
+                speed = speed - 10
+                print(speed)
+                time.sleep(0.5)
+
+
+bluczus = Blut()
+bluczus.define_port("COM6")
+bluczus.start_connection()
+bluczus.board_setup()
+bluczus.transmission()
 print('done')
 
