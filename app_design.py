@@ -5,6 +5,7 @@ import os
 from PIL import Image, ImageTk
 import ctypes
 from conversion import *
+import ports
 
 
 """
@@ -80,6 +81,12 @@ class App(customtkinter.CTk):
         # create home frame
         self.home_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.home_frame.grid_columnconfigure(0, weight=1)
+
+        self.available_ports = ports.Port()
+
+        self.optionmenu_1 = customtkinter.CTkOptionMenu(self.home_frame, dynamic_resizing=False,
+                                                        values=self.available_ports.scanner())
+        self.optionmenu_1.grid(row=0, column=0, padx=20, pady=(20, 10))
 
         # create textbox/consol no 1
         self.console1position = 5.0
