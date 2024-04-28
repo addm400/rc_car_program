@@ -7,6 +7,7 @@ import ctypes
 from conversion import *
 import ports
 from blut import *
+from threading import Thread
 
 
 """
@@ -333,8 +334,14 @@ class App(customtkinter.CTk):
 
     """periodic function for sending/printing data which control the car"""
     def printer(self):
+        self.bluetooth.start_connection()
+
+        self.alarm = self.after(10, self.trans)
+
+    def trans(self):
         self.bluetooth.transmission(self.speed_data[1])
-        self.alarm = self.after(10, self.printer)
+        self.alarm = self.after(10, self.trans)
+
 
     def change_scaling_event(self, new_scaling: str):
         new_scaling_float = int(new_scaling.replace("%", "")) / 100
@@ -363,6 +370,7 @@ class App(customtkinter.CTk):
         print('refresh')
 
     def connect_button_event(self):
-        self.bluetooth.start_connection()
-        self.printer()
+        new_thread = Thread(target=self.printer, args=(), daemon=True)
+        new_thread.start()
+        #self.printer()
 
