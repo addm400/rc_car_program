@@ -40,14 +40,14 @@ class ConversionSys:
         elif -15 > self.velocity["y_speed"] > -90:
             self.velocity["y_speed"] = -self.velocity["y_speed"] + 90
 
-        elif 15 > self.velocity["y_speed"] >= 0:
-            self.velocity["y_speed"] = 0
-        elif -15 < self.velocity["y_speed"] <= 0:
-            self.velocity["y_speed"] = 0
+        elif 15 >= self.velocity["y_speed"] >= 0:
+            self.velocity["y_speed"] = 90
+        elif -15 <= self.velocity["y_speed"] <= 0:
+            self.velocity["y_speed"] = 90
 
-        elif self.velocity["y_speed"] > 90:
+        elif self.velocity["y_speed"] >= 90:
             self.velocity["y_speed"] = 10
-        elif self.velocity["y_speed"] < -90:
+        elif self.velocity["y_speed"] <= -90:
             self.velocity["y_speed"] = 170
         """
         1 część zrobiona aby przekształcić dane zebrane z osi Y

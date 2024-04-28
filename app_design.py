@@ -6,6 +6,7 @@ from PIL import Image, ImageTk
 import ctypes
 from conversion import *
 import ports
+from blut import *
 
 
 """
@@ -186,14 +187,14 @@ class App(customtkinter.CTk):
         self.current_speed = [62]
 
         # tab for holding speed data which will be sent to the car
-        self.speed_data = [180, 0]
+        self.speed_data = [180, 90]
 
         # binding key press and release
         self.bind('<Key>', self.key_press)
         self.bind("<KeyRelease>", self.key_release)
 
         # starting periodic function to pass data
-        self.alarm = self.after(100, self.printer)
+        #self.alarm = self.after(100, self.printer)
 
         # tab for holding which window is currently displayed (1/2/3)
         self.which_window = [1]
@@ -208,6 +209,9 @@ class App(customtkinter.CTk):
         self.conv_sys = ConversionSys()
 
         #print(self.scaleFactor)
+
+        self.bluetooth = Blut()
+
 
     def select_frame_by_name(self, name):
         # set button color for selected button
@@ -302,7 +306,7 @@ class App(customtkinter.CTk):
                                    self.joystick_database["x_home"], self.joystick_database["y_home"])
 
         self.speed_data[0] = 180
-        self.speed_data[1] = 0
+        self.speed_data[1] = 90
 
     def key_press(self, event):
         if self.which_window[0] == 2:
@@ -329,7 +333,7 @@ class App(customtkinter.CTk):
 
     """periodic function for sending/printing data which control the car"""
     def printer(self):
-        print(self.speed_data)
+        self.bluetooth.transmission(self.speed_data[1])
         self.alarm = self.after(10, self.printer)
 
     def change_scaling_event(self, new_scaling: str):
@@ -359,4 +363,6 @@ class App(customtkinter.CTk):
         print('refresh')
 
     def connect_button_event(self):
-        print("connect")
+        self.bluetooth.start_connection()
+        self.printer()
+
