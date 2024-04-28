@@ -185,7 +185,8 @@ class App(customtkinter.CTk):
 
         """Car control"""
         # initial speed value of a car
-        self.current_speed = [62]
+        self.current_speed = [70, 110]
+        # w przód i w tył
 
         # tab for holding speed data which will be sent to the car
         self.speed_data = [180, 90]
@@ -247,17 +248,20 @@ class App(customtkinter.CTk):
         self.which_window[0] = 3
 
     def radio_button_1(self):
-        self.current_speed[0] = 62
+        self.current_speed[0] = 70
+        self.current_speed[1] = 110
         self.textbox2.insert(index=self.console2position, text="30% of maximum car speed is set.\n\n")
         self.console2position += 2
 
     def radio_button_2(self):
-        self.current_speed[0] = 124
+        self.current_speed[0] = 40
+        self.current_speed[1] = 140
         self.textbox2.insert(index=self.console2position, text="60% of maximum car speed is set.\n\n")
         self.console2position += 2
 
     def radio_button_3(self):
-        self.current_speed[0] = 205
+        self.current_speed[0] = 10
+        self.current_speed[1] = 170
         self.textbox2.insert(index=self.console2position, text="100% of maximum car speed is set.\n\n")
         self.console2position += 2
 
@@ -314,7 +318,7 @@ class App(customtkinter.CTk):
             if event.char == "w":
                 self.speed_data[1] = self.current_speed[0]
             elif event.char == "s":
-                self.speed_data[1] = -self.current_speed[0]
+                self.speed_data[1] = self.current_speed[1]
             elif event.char == "a":
                 self.speed_data[0] = 140
             elif event.char == "d":
@@ -324,9 +328,9 @@ class App(customtkinter.CTk):
 
         if self.which_window[0] == 2:
             if event.char == "w":
-                self.speed_data[1] = 0
+                self.speed_data[1] = 90
             elif event.char == "s":
-                self.speed_data[1] = 0
+                self.speed_data[1] = 90
             elif event.char == "a":
                 self.speed_data[0] = 180
             elif event.char == "d":
@@ -340,6 +344,7 @@ class App(customtkinter.CTk):
 
     def trans(self):
         self.bluetooth.transmission(self.speed_data[1])
+        #print(self.speed_data)
         self.alarm = self.after(10, self.trans)
 
 
