@@ -9,7 +9,7 @@ class Blut:
         self.data = {
             "x": 180,
             "y": 91,
-            "port": "COM6",
+            "port": "COM3",
             "connected": 0
         }
 
@@ -24,6 +24,7 @@ class Blut:
         print("\n*****CONNECTING STARTED*****")
         try:
             self.board = Arduino(self.data['port'])
+            self.board.analog[0].read()  # to jest chyba lekarstwo na problemy z wykrywaniem płytki
         except:
             print("connection failed")
         else:
