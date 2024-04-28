@@ -21,24 +21,16 @@ class ConversionSys:
 
         self.scale_check(scale)
 
-        if coords[0] < self.axis_value["end_value"]:
-            self.velocity["x_speed"] = coords[0] - self.axis_value["end_value"]
-        if coords[0] > self.axis_value["end_value"]:
-            self.velocity["x_speed"] = coords[0] - self.axis_value["end_value"]
-        if coords[0] == self.axis_value["end_value"]:
-            self.velocity["x_speed"] = 0
-
-        if coords[1] < self.axis_value["end_value"]:
-            self.velocity["y_speed"] = -coords[1] + self.axis_value["end_value"]
-        if coords[1] > self.axis_value["end_value"]:
-            self.velocity["y_speed"] = -(coords[1] - self.axis_value["end_value"])
-        if coords[1] == self.axis_value["end_value"]:
-            self.velocity["y_speed"] = 0
+        self.velocity["x_speed"] = coords[0] - self.axis_value["end_value"]
+        self.velocity["y_speed"] = (coords[1] - self.axis_value["end_value"]) * (-1)
 
         if scale == 1:
             return self.speed_data_conversion_100()
         if scale == 1.5:
             return self.speed_data_conversion_150()
+
+
+
 
     # function to convert units from axes (joystick) into real car control values
     def speed_data_conversion_100(self):

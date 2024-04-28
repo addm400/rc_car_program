@@ -87,6 +87,10 @@ class App(customtkinter.CTk):
         self.sidebar_button_1 = customtkinter.CTkButton(self.home_frame, command=self.refresh_button_event, text="Refresh")
         self.sidebar_button_1.grid(row=1, column=0, padx=20, pady=10)
 
+        self.sidebar_button_2 = customtkinter.CTkButton(self.home_frame, command=self.connect_button_event,
+                                                        text="Connect")
+        self.sidebar_button_2.grid(row=2, column=0, padx=20, pady=10)
+
         self.optionmenu_1 = customtkinter.CTkOptionMenu(self.home_frame, dynamic_resizing=False,
                                                         values=self.available_ports.scanner(), command=self.com_menu_event)
         self.optionmenu_1.grid(row=0, column=0, padx=20, pady=(20, 10))
@@ -353,3 +357,6 @@ class App(customtkinter.CTk):
 
     def refresh_button_event(self):
         print('refresh')
+
+    def connect_button_event(self):
+        print("connect")
