@@ -9,7 +9,7 @@ class Blut:
         self.data = {
             "x": 180,
             "y": 90,
-            "port": "0"
+            "port": "0",
         }
 
         self.pin3 = 3
@@ -20,17 +20,17 @@ class Blut:
         self.data['port'] = port_value
 
     def start_connection(self):
-        print("\n*****CONNECTION STARTED*****")
-        self.board = Arduino(self.data['port'])
-        for i in range(3):
-            for j in range(3):
-                print('.', end="")
-                time.sleep(0.5)
-            print("")
-            time.sleep(0.5)
-        print("*****CONNECTED*****")
-        time.sleep(1)
-        self.board_setup()
+        print("\n*****CONNECTING STARTED*****")
+        try:
+            self.board = Arduino(self.data['port'])
+            time.sleep(1)
+            self.data['connection_status'] = 1
+        except:
+            print("connection failed")
+        else:
+            print("*****CONNECTED*****")
+            time.sleep(1)
+            self.board_setup()
 
     def board_setup(self):
         pass

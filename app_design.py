@@ -84,8 +84,11 @@ class App(customtkinter.CTk):
 
         self.available_ports = ports.Port()
 
+        self.sidebar_button_1 = customtkinter.CTkButton(self.home_frame, command=self.refresh_button_event, text="Refresh")
+        self.sidebar_button_1.grid(row=1, column=0, padx=20, pady=10)
+
         self.optionmenu_1 = customtkinter.CTkOptionMenu(self.home_frame, dynamic_resizing=False,
-                                                        values=self.available_ports.scanner())
+                                                        values=self.available_ports.scanner(), command=self.com_menu_event)
         self.optionmenu_1.grid(row=0, column=0, padx=20, pady=(20, 10))
 
         # create textbox/consol no 1
@@ -345,3 +348,8 @@ class App(customtkinter.CTk):
 
             self.joystick_database['end_value'] = 316
 
+    def com_menu_event(self, selection):
+        print(selection)
+
+    def refresh_button_event(self):
+        print('refresh')
