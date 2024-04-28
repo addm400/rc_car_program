@@ -35,20 +35,20 @@ class ConversionSys:
     # function to convert units from axes (joystick) into real car control values
     def speed_data_conversion_100(self):
 
-        if 15 < self.velocity["y_speed"] < 85:
-            self.velocity["y_speed"] = 2*self.velocity["y_speed"] + 44
-        elif -15 > self.velocity["y_speed"] > -85:
-            self.velocity["y_speed"] = 2*self.velocity["y_speed"] - 44
+        if 15 < self.velocity["y_speed"] < 90:
+            self.velocity["y_speed"] = 98 - self.velocity["y_speed"]
+        elif -15 > self.velocity["y_speed"] > -90:
+            self.velocity["y_speed"] = -self.velocity["y_speed"] + 90
 
         elif 15 > self.velocity["y_speed"] >= 0:
             self.velocity["y_speed"] = 0
         elif -15 < self.velocity["y_speed"] <= 0:
             self.velocity["y_speed"] = 0
 
-        elif self.velocity["y_speed"] > 85:
-            self.velocity["y_speed"] = 214
-        elif self.velocity["y_speed"] < -85:
-            self.velocity["y_speed"] = -214
+        elif self.velocity["y_speed"] > 90:
+            self.velocity["y_speed"] = 10
+        elif self.velocity["y_speed"] < -90:
+            self.velocity["y_speed"] = 170
         """
         1 część zrobiona aby przekształcić dane zebrane z osi Y
         na wartości odpowiadające sterowaniu silnika (DC 3V/6V)

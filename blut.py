@@ -8,7 +8,7 @@ class Blut:
 
         self.data = {
             "x": 180,
-            "y": 90,
+            "y": 91,
             "port": "0",
         }
 
@@ -37,14 +37,9 @@ class Blut:
         self.board.digital[self.pin3].mode = SERVO
 
     def transmission(self):
+        self.board.digital[self.pin3].write(10)
+        time.sleep(2)
 
-        for i in range(5):
-            speed = 90
-            for j in range(8):
-                self.board.digital[self.pin3].write(speed)
-                speed = speed - 10
-                print(speed)
-                time.sleep(0.5)
 
 
 bluczus = Blut()
