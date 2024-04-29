@@ -121,13 +121,13 @@ class App(customtkinter.CTk):
         self.keyboard_image_label.grid(row=0, column=0, padx=(20, 0), pady=(0, 0))
 
         self.label_tab_2_frame = customtkinter.CTkFrame(self.second_frame)
-        self.label_tab_2_frame.grid(row=1, column=0, padx=(20, 12), pady=(0, 15), sticky="nsew")
+        self.label_tab_2_frame.grid(row=1, column=0, padx=(20, 0), pady=(0, 15), sticky="nsew")
 
         self.label_tab_2 = customtkinter.CTkLabel(self.label_tab_2_frame, text="W – MOVE FORWARD\n" +
                                                                           "S – MOVE BACKWARD\n" +
                                                                           "A – TURN LEFT \n" +
                                                                           "D – TURN RIGHT")
-        self.label_tab_2.grid(row=0, column=0, padx=(60, 0), pady=(15, 15))
+        self.label_tab_2.grid(row=0, column=0, padx=(70, 0), pady=(15, 15))
 
         # create textbox/console no 2
         """self.console2position = 5.0
