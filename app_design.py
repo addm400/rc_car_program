@@ -86,11 +86,12 @@ class App(customtkinter.CTk):
 
         self.available_ports = ports.Port()
 
-        self.sidebar_button_1 = customtkinter.CTkButton(self.home_frame, command=self.refresh_button_event, text="Refresh")
+        self.sidebar_button_1 = customtkinter.CTkButton(self.home_frame, command=self.refresh_button_event,
+                                                        text="Refresh")
         self.sidebar_button_1.grid(row=1, column=0, padx=20, pady=10)
 
         self.sidebar_button_2 = customtkinter.CTkButton(self.home_frame, command=self.connect_button_event,
-                                                        text="Connect")
+                                                        text="Connect", fg_color="green")
         self.sidebar_button_2.grid(row=2, column=0, padx=20, pady=10)
 
         self.optionmenu_1 = customtkinter.CTkOptionMenu(self.home_frame, dynamic_resizing=False,
@@ -100,7 +101,7 @@ class App(customtkinter.CTk):
         # create textbox/consol no 1
         self.console1position = 5.0
         self.textbox1 = customtkinter.CTkTextbox(self, width=100, height=150)
-        self.textbox1.grid(row=1, column=1, columnspan=2, padx=(20, 12), pady=(20, 20), sticky="nsew")
+        self.textbox1.grid(row=1, column=1, columnspan=2, padx=(20, 20), pady=(20, 20), sticky="nsew")
         self.textbox1.insert("0.0", "Console\n\n" + "Some info.\n\n")
 
         # create second frame
@@ -127,19 +128,19 @@ class App(customtkinter.CTk):
         self.radiobutton_frame.grid(row=0, column=1, rowspan=2, padx=(20, 20), pady=(20, 0), sticky="nsew")
         self.radio_var = tkinter.IntVar(value=0)
         self.label_radio_group = customtkinter.CTkLabel(master=self.radiobutton_frame, text="Speed Control", font=customtkinter.CTkFont(size=20))
-        self.label_radio_group.grid(row=0, column=1, columnspan=1, padx=(70, 0), pady=(50, 20), sticky="nsew")
+        self.label_radio_group.grid(row=0, column=1, columnspan=1, padx=(70, 50), pady=(50, 20), sticky="nsew")
 
         self.radio_button_1 = customtkinter.CTkRadioButton(master=self.radiobutton_frame, variable=self.radio_var, value=0,
                                                            text="30% of MAX SPEED", font=customtkinter.CTkFont(size=13), command=self.radio_button_1)
-        self.radio_button_1.grid(row=1, column=1, pady=10, padx=(70, 0), sticky="n")
+        self.radio_button_1.grid(row=1, column=1, pady=10, padx=(70, 50), sticky="n")
 
         self.radio_button_2 = customtkinter.CTkRadioButton(master=self.radiobutton_frame, variable=self.radio_var, value=1,
                                                            text="60% of MAX SPEED", font=customtkinter.CTkFont(size=13), command=self.radio_button_2)
-        self.radio_button_2.grid(row=2, column=1, pady=10, padx=(70, 0), sticky="n")
+        self.radio_button_2.grid(row=2, column=1, pady=10, padx=(70, 50), sticky="n")
 
         self.radio_button_3 = customtkinter.CTkRadioButton(master=self.radiobutton_frame, variable=self.radio_var, value=2,
                                                            text="100% of MAX SPEED", font=customtkinter.CTkFont(size=13), command=self.radio_button_3)
-        self.radio_button_3.grid(row=3, column=1, pady=10, padx=(76, 0), sticky="n")
+        self.radio_button_3.grid(row=3, column=1, pady=10, padx=(76, 50), sticky="n")
 
         # create third frame
         self.dragInfo_x = 0
@@ -203,12 +204,12 @@ class App(customtkinter.CTk):
         # tab for holding which window is currently displayed (1/2/3)
         self.which_window = [1]
 
-        self.scaling_label = customtkinter.CTkLabel(self.navigation_frame, text="UI Scaling:", anchor="w")
+        """self.scaling_label = customtkinter.CTkLabel(self.navigation_frame, text="UI Scaling:", anchor="w")
         self.scaling_label.grid(row=7, column=0, padx=20, pady=(10, 0))
         self.scaling_optionemenu = customtkinter.CTkOptionMenu(self.navigation_frame,
                                                                values=["80%", "90%", "100%", "110%", "120%"],
                                                                command=self.change_scaling_event)
-        self.scaling_optionemenu.grid(row=8, column=0, padx=20, pady=(10, 20))
+        self.scaling_optionemenu.grid(row=8, column=0, padx=20, pady=(10, 20))"""
 
         self.conv_sys = ConversionSys()
 
@@ -365,9 +366,9 @@ class App(customtkinter.CTk):
         print(self.speed_data)
         self.alarm = self.after(10, self.trans)
 
-    def change_scaling_event(self, new_scaling: str):
+    """def change_scaling_event(self, new_scaling: str):
         new_scaling_float = int(new_scaling.replace("%", "")) / 100
-        customtkinter.set_widget_scaling(new_scaling_float)
+        customtkinter.set_widget_scaling(new_scaling_float)"""
 
     def scaling_image(self):
         if self.scaleFactor == 1.5:
