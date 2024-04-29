@@ -52,134 +52,140 @@ class App(customtkinter.CTk):
 
         # load images that will be used later
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "test_images")
-        self.logo_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "icon.png")), size=(45, 30))
-        self.home_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "home_pic.png")), size=(20, 20))
-        self.chat_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "keyboard_pic.png")), size=(20, 20))
-        self.add_user_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "joystick_pic.png")), size=(20, 20))
-        self.keyboard_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "strzalki.png")), size=(239, 220))
+        self.logo_icon = customtkinter.CTkImage(Image.open(os.path.join(image_path, "icon.png")), size=(45, 30))
+        self.home_icon = customtkinter.CTkImage(Image.open(os.path.join(image_path, "home_pic.png")), size=(20, 20))
+        self.keyboard_icon = customtkinter.CTkImage(Image.open(os.path.join(image_path, "keyboard_pic.png")), size=(20, 20))
+        self.joystick_icon = customtkinter.CTkImage(Image.open(os.path.join(image_path, "joystick_pic.png")), size=(20, 20))
+        self.arrows_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "strzalki.png")), size=(239, 220))
 
-        self.strzalki = Image.open('test_images//arrows.png')
-        self.strzalki = self.strzalki.resize((self.image_database["board_size_100"], self.image_database["board_size_100"]))
+        self.joystick_board_image = Image.open('test_images//arrows.png')
+        self.joystick_board_image = self.joystick_board_image.resize((self.image_database["board_size_100"], self.image_database["board_size_100"]))
 
-        self.kolko = Image.open('test_images//kolko.png')
-        self.kolko = self.kolko.resize((self.image_database["joystick_size_100"], self.image_database["joystick_size_100"]))
+        self.joystick_circle = Image.open('test_images//kolko.png')
+        self.joystick_circle = self.joystick_circle.resize((self.image_database["joystick_size_100"], self.image_database["joystick_size_100"]))
 
         # create navigation frame on the left hand side
         self.navigation_frame = customtkinter.CTkFrame(self, corner_radius=0)
         self.navigation_frame.grid(row=0, column=0, rowspan=3, sticky="nsew")
         self.navigation_frame.grid_rowconfigure(4, weight=1)
 
-        self.navigation_frame_label = customtkinter.CTkLabel(self.navigation_frame, text="  Control Panel", image=self.logo_image,
+        self.navigation_frame_label = customtkinter.CTkLabel(self.navigation_frame, text="  Control Panel", image=self.logo_icon,
                                                              compound="left", font=customtkinter.CTkFont(size=15, weight="bold"))
         self.navigation_frame_label.grid(row=0, column=0, padx=20, pady=20)
 
+        # create buttons to switch between pages
         self.home_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40, border_spacing=10, text="Home",
                                                    fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                   image=self.home_image, anchor="w", command=self.home_button_event)
+                                                   image=self.home_icon, anchor="w", command=self.home_button_event)
         self.home_button.grid(row=1, column=0, sticky="ew")
 
         self.keyboard_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40, border_spacing=10, text="Keyboard",
                                                        fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                       image=self.chat_image, anchor="w", command=self.keyboard_button_event)
+                                                       image=self.keyboard_icon, anchor="w", command=self.keyboard_button_event)
         self.keyboard_button.grid(row=2, column=0, sticky="ew")
 
         self.joystick_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40, border_spacing=10, text="Joystick",
                                                        fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                       image=self.add_user_image, anchor="w", command=self.joystick_button_event)
+                                                       image=self.joystick_icon, anchor="w", command=self.joystick_button_event)
         self.joystick_button.grid(row=3, column=0, sticky="ew")
 
         # create home frame
         self.home_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.home_frame.grid_columnconfigure(0, weight=1)
 
-        self.available_ports = Port()
+        # looking for a COM port associated with HC-05 bluetooth module for Arduino
+        self.bluetooth_module_port = Port()
 
         self.connect_button = customtkinter.CTkButton(self.home_frame, command=self.connect_button_event,
                                                       text="Connect", fg_color="green")
         self.connect_button.grid(row=1, column=0, padx=20, pady=10)
 
+        """tutaj należy zrobić layout dla ramki home"""
         self.optionmenu_1 = customtkinter.CTkOptionMenu(self.home_frame, dynamic_resizing=False,
-                                                        values=self.available_ports.scanner(), command=self.com_menu_event)
+                                                        values=self.bluetooth_module_port.scanner(), command=self.com_menu_event)
         self.optionmenu_1.grid(row=0, column=0, padx=20, pady=(20, 10))
 
         # create textbox/consol
-
-        # a variable for holding current position of cursor in console
-        self.consoleposition = 5.0
-
         self.consol_frame = customtkinter.CTkFrame(self, fg_color='#1d1e1e', corner_radius=0)
         self.consol_frame.grid(row=1, column=1, padx=(20, 20), pady=(20, 0), sticky="nsew",)
 
+        # frame and label created to display console name at the top of the text box
         self.console_name = customtkinter.CTkLabel(master=self.consol_frame, text="Console",
                                                         font=customtkinter.CTkFont(size=13))
         self.console_name.grid(row=0, column=0, padx=(10, 20), pady=(0, 0), sticky="nsew")
+
+        # a variable for holding current position of cursor in console
+        self.consoleposition = 5.0
 
         self.console = customtkinter.CTkTextbox(self, width=100, height=120, corner_radius=0)
         self.console.grid(row=2, column=1, columnspan=2, padx=(20, 20), pady=(0, 20), sticky="nsew")
         self.console.configure(state="disabled")
 
         # create second frame
-        self.second_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
-        self.second_frame.grid_columnconfigure(0, weight=1)
+        self.keyboard_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.keyboard_frame.grid_columnconfigure(0, weight=1)
 
-        self.keyboard_image_label = customtkinter.CTkLabel(self.second_frame, text="", image=self.keyboard_image)
+        self.keyboard_image_label = customtkinter.CTkLabel(self.keyboard_frame, text="", image=self.arrows_image)
         self.keyboard_image_label.grid(row=0, column=0, padx=(20, 0), pady=(0, 0))
 
-        self.label_tab_2_frame = customtkinter.CTkFrame(self.second_frame)
-        self.label_tab_2_frame.grid(row=1, column=0, padx=(20, 0), pady=(0, 15), sticky="nsew")
+        self.keyboard_instruction_frame = customtkinter.CTkFrame(self.keyboard_frame)
+        self.keyboard_instruction_frame.grid(row=1, column=0, padx=(20, 0), pady=(0, 15), sticky="nsew")
 
-        self.label_tab_2 = customtkinter.CTkLabel(self.label_tab_2_frame, text="W – MOVE FORWARD\n" +
+        self.keyboard_instruction = customtkinter.CTkLabel(self.keyboard_instruction_frame, text="W – MOVE FORWARD\n" +
                                                                           "S – MOVE BACKWARD\n" +
                                                                           "A – TURN LEFT \n" +
                                                                           "D – TURN RIGHT")
-        self.label_tab_2.grid(row=0, column=0, padx=(70, 0), pady=(15, 15))
+        self.keyboard_instruction.grid(row=0, column=0, padx=(70, 0), pady=(15, 15))
 
         # radiobutton frame
-        self.radiobutton_frame = customtkinter.CTkFrame(self.second_frame)
-        self.radiobutton_frame.grid(row=0, column=1, rowspan=2, padx=(20, 20), pady=(20, 0), sticky="nsew")
+        self.radiobutton_speed_control_frame = customtkinter.CTkFrame(self.keyboard_frame)
+        self.radiobutton_speed_control_frame.grid(row=0, column=1, rowspan=2, padx=(20, 20), pady=(20, 0), sticky="nsew")
         self.radio_var = tkinter.IntVar(value=0)
-        self.label_radio_group = customtkinter.CTkLabel(master=self.radiobutton_frame, text="Speed Control", font=customtkinter.CTkFont(size=20))
-        self.label_radio_group.grid(row=0, column=1, columnspan=1, padx=(70, 50), pady=(50, 20), sticky="nsew")
 
-        self.radio_button_1 = customtkinter.CTkRadioButton(master=self.radiobutton_frame, variable=self.radio_var, value=0,
-                                                           text="30% of MAX SPEED", font=customtkinter.CTkFont(size=13), command=self.radio_button_1)
-        self.radio_button_1.grid(row=1, column=1, pady=10, padx=(70, 50), sticky="n")
+        # creating label for radio buttons to control speed
+        self.label_radio_speed = customtkinter.CTkLabel(master=self.radiobutton_speed_control_frame, text="Speed Control", font=customtkinter.CTkFont(size=20))
+        self.label_radio_speed.grid(row=0, column=1, columnspan=1, padx=(70, 50), pady=(50, 20), sticky="nsew")
 
-        self.radio_button_2 = customtkinter.CTkRadioButton(master=self.radiobutton_frame, variable=self.radio_var, value=1,
-                                                           text="60% of MAX SPEED", font=customtkinter.CTkFont(size=13), command=self.radio_button_2)
-        self.radio_button_2.grid(row=2, column=1, pady=10, padx=(70, 50), sticky="n")
+        self.radio_30_button = customtkinter.CTkRadioButton(master=self.radiobutton_speed_control_frame, variable=self.radio_var, value=0,
+                                                            text="30% of MAX SPEED", font=customtkinter.CTkFont(size=13), command=self.radio_button_1)
+        self.radio_30_button.grid(row=1, column=1, pady=10, padx=(70, 50), sticky="n")
 
-        self.radio_button_3 = customtkinter.CTkRadioButton(master=self.radiobutton_frame, variable=self.radio_var, value=2,
-                                                           text="100% of MAX SPEED", font=customtkinter.CTkFont(size=13), command=self.radio_button_3)
-        self.radio_button_3.grid(row=3, column=1, pady=10, padx=(76, 50), sticky="n")
+        self.radio_60_button = customtkinter.CTkRadioButton(master=self.radiobutton_speed_control_frame, variable=self.radio_var, value=1,
+                                                            text="60% of MAX SPEED", font=customtkinter.CTkFont(size=13), command=self.radio_button_2)
+        self.radio_60_button.grid(row=2, column=1, pady=10, padx=(70, 50), sticky="n")
+
+        self.radio_100_button = customtkinter.CTkRadioButton(master=self.radiobutton_speed_control_frame, variable=self.radio_var, value=2,
+                                                             text="100% of MAX SPEED", font=customtkinter.CTkFont(size=13), command=self.radio_button_3)
+        self.radio_100_button.grid(row=3, column=1, pady=10, padx=(76, 50), sticky="n")
 
         # create third frame
+        self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.third_frame.grid_columnconfigure(0, weight=1)
 
         # getting current scale factor of windows for image adjusting
         self.scaleFactor = (ctypes.windll.shcore.GetScaleFactorForDevice(0) / 100)
 
-        self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
-        self.third_frame.grid_columnconfigure(0, weight=1)
-
-        self.joystick_board = Canvas(self.third_frame, width=self.canvas_database["canvas_width_100"],
-                                     height=self.canvas_database["canvas_height_100"], highlightthickness=0)
-        self.joystick_board.grid(row=0, column=0, pady=(20, 0), padx=(22, 306))
+        self.joystick_board_label = Canvas(self.third_frame, width=self.canvas_database["canvas_width_100"],
+                                           height=self.canvas_database["canvas_height_100"], highlightthickness=0)
+        self.joystick_board_label.grid(row=0, column=0, pady=(20, 0), padx=(22, 306))
 
         # scaling images based on scale factor
         self.scaling_image()
 
-        self.bgphoto = ImageTk.PhotoImage(self.strzalki)
-        self.plansza = self.joystick_board.create_image(0, 0, image=self.bgphoto, anchor=NW)
+        # creating bg photo of joystick board using canvas
+        self.bgphoto = ImageTk.PhotoImage(self.joystick_board_image)
+        self.joystick_board = self.joystick_board_label.create_image(0, 0, image=self.bgphoto, anchor=NW)
 
-        self.analog = ImageTk.PhotoImage(self.kolko)
-        self.joystick_steering_label = self.joystick_board.create_image(0, 0, image=self.analog, anchor=NW)
+        # creating photo of joystick control using canvas
+        self.analog = ImageTk.PhotoImage(self.joystick_circle)
+        self.joystick_control_circle = self.joystick_board_label.create_image(0, 0, image=self.analog, anchor=NW)
 
-        self.joystick_board.moveto(self.joystick_steering_label,
-                                   self.joystick_database["x_home"], self.joystick_database["y_home"])
+        self.joystick_board_label.moveto(self.joystick_control_circle,
+                                         self.joystick_database["x_home"], self.joystick_database["y_home"])
 
-        self.joystick_board.tag_bind(self.joystick_steering_label, "<Button-1>", self.drag_start)
-        self.joystick_board.tag_bind(self.joystick_steering_label, "<B1-Motion>", self.drag_motion)
-        self.joystick_board.tag_bind(self.joystick_steering_label, "<ButtonRelease-1>", self.dropped)
+        self.joystick_board_label.tag_bind(self.joystick_control_circle, "<Button-1>", self.drag_start)
+        self.joystick_board_label.tag_bind(self.joystick_control_circle, "<B1-Motion>", self.drag_motion)
+        self.joystick_board_label.tag_bind(self.joystick_control_circle, "<ButtonRelease-1>", self.dropped)
 
         # select default frame
         self.select_frame_by_name("home")
@@ -215,9 +221,9 @@ class App(customtkinter.CTk):
         else:
             self.home_frame.grid_forget()
         if name == "keyboard":
-            self.second_frame.grid(row=0, column=1, sticky="nsew")
+            self.keyboard_frame.grid(row=0, column=1, sticky="nsew")
         else:
-            self.second_frame.grid_forget()
+            self.keyboard_frame.grid_forget()
         if name == "joystick":
             self.third_frame.grid(row=0, column=1, sticky="nsew")
         else:
@@ -265,7 +271,7 @@ class App(customtkinter.CTk):
     # wracanie joysticka na środek układu
 
     def drag_start(self, event):
-        self.coordinates = self.joystick_board.coords(self.joystick_steering_label)
+        self.coordinates = self.joystick_board_label.coords(self.joystick_control_circle)
         self.x_pos = event.x  # tutej gdzieś można dopisać lnijke ktora usunałęm, może jostick nie bedzie uciekał
         self.y_pos = event.y
 
@@ -293,8 +299,8 @@ class App(customtkinter.CTk):
             self.y_pos = win_y
 
         # obsługa przesuwania obiektu w naszym układzie wspl
-        self.joystick_board.moveto(self.joystick_steering_label, x, y)
-        self.coordinates = self.joystick_board.coords(self.joystick_steering_label)
+        self.joystick_board_label.moveto(self.joystick_control_circle, x, y)
+        self.coordinates = self.joystick_board_label.coords(self.joystick_control_circle)
         self.coordinates[0] = int(self.coordinates[0])
         self.coordinates[1] = int(self.coordinates[1])
 
@@ -304,8 +310,8 @@ class App(customtkinter.CTk):
         self.speed_data[1] = new_speed["y_speed"]
 
     def dropped(self, event):
-        self.joystick_board.moveto(self.joystick_steering_label,
-                                   self.joystick_database["x_home"], self.joystick_database["y_home"])
+        self.joystick_board_label.moveto(self.joystick_control_circle,
+                                         self.joystick_database["x_home"], self.joystick_database["y_home"])
 
         self.speed_data[0] = 180
         self.speed_data[1] = 90
@@ -366,15 +372,15 @@ class App(customtkinter.CTk):
 
     def scaling_image(self):
         if self.scaleFactor == 1.5:
-            self.joystick_board.configure(width=self.canvas_database["canvas_width_150"],
-                                          height=self.canvas_database["canvas_height_150"])
-            self.joystick_board.grid(row=0, column=0, pady=(20, 0), padx=(0, 410))
+            self.joystick_board_label.configure(width=self.canvas_database["canvas_width_150"],
+                                                height=self.canvas_database["canvas_height_150"])
+            self.joystick_board_label.grid(row=0, column=0, pady=(20, 0), padx=(0, 410))
 
-            self.strzalki = self.strzalki.resize((self.image_database["board_size_150"],
-                                                  self.image_database["board_size_150"]))
+            self.joystick_board_image = self.joystick_board_image.resize((self.image_database["board_size_150"],
+                                                                          self.image_database["board_size_150"]))
 
-            self.kolko = self.kolko.resize((self.image_database["joystick_size_150"],
-                                            self.image_database["joystick_size_150"]))
+            self.joystick_circle = self.joystick_circle.resize((self.image_database["joystick_size_150"],
+                                                                self.image_database["joystick_size_150"]))
 
             self.joystick_database["x_home"] = 157
             self.joystick_database["y_home"] = 156
