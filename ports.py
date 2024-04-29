@@ -9,9 +9,9 @@ class Port:
     def scanner(self):
         to_connect = []
         for port, desc, hwid in sorted(self.ports):
-            if 'Bluetooth' in desc:
+            if '98D341F70297' in hwid:
                 to_connect.append(port)
         return to_connect
-
+    # 98D341F70297 number associated with HC-05
 
 

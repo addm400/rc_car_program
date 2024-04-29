@@ -338,15 +338,29 @@ class App(customtkinter.CTk):
 
     """periodic function for sending/printing data which control the car"""
     def printer(self):
-        self.bluetooth.start_connection()
+        port = self.available_ports.scanner()[0]
+        if len(port) > 0:
+            self.bluetooth.define_port(self.available_ports.scanner()[0])
+            try:
+                self.bluetooth.start_connection()
+            except AttributeError as e:
+                print("connection failed")
+                print("check connection")
+            except:
+                print("connection failed")
+                print("check connection")
+            else:
+                print("*****CONNECTED*****")
+                self.bluetooth.board_setup()
+                self.trans()
+        else:
+            print('check connection')
 
-        self.alarm = self.after(10, self.trans)
 
     def trans(self):
         self.bluetooth.transmission(self.speed_data[1])
         #print(self.speed_data)
         self.alarm = self.after(10, self.trans)
-
 
     def change_scaling_event(self, new_scaling: str):
         new_scaling_float = int(new_scaling.replace("%", "")) / 100
