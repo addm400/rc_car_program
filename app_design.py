@@ -166,7 +166,7 @@ class App(customtkinter.CTk):
 
         self.joystick_board = Canvas(self.third_frame, width=self.canvas_database["canvas_width_100"],
                                      height=self.canvas_database["canvas_height_100"], highlightthickness=0)
-        self.joystick_board.grid(row=0, column=0, pady=(20, 0), padx=(0, 410))
+        self.joystick_board.grid(row=0, column=0, pady=(20, 0), padx=(22, 306))
 
         self.strzalki = Image.open('test_images//arrows.png')
         self.strzalki = self.strzalki.resize((self.image_database["board_size_100"], self.image_database["board_size_100"]))
@@ -395,6 +395,7 @@ class App(customtkinter.CTk):
         if self.scaleFactor == 1.5:
             self.joystick_board.configure(width=self.canvas_database["canvas_width_150"],
                                           height=self.canvas_database["canvas_height_150"])
+            self.joystick_board.grid(row=0, column=0, pady=(20, 0), padx=(0, 410))
 
             self.strzalki = self.strzalki.resize((self.image_database["board_size_150"],
                                                   self.image_database["board_size_150"]))
