@@ -195,6 +195,14 @@ class App(customtkinter.CTk):
         self.select_frame_by_name("home")
 
         """Car control"""
+
+        self.car_database = {
+            "keyboard_speed_forward": 70,
+            "keyboard_speed_backward": 110,
+            "current_speed_x": 180,
+            "current_speed_y": 90,
+        }
+
         # initial speed value of a car for keyboard steering
         self.current_speed = [70, 110]
         # w przód i w tył
@@ -243,8 +251,10 @@ class App(customtkinter.CTk):
 
     def radio_button_1(self):
         self.console.configure(state="normal")
-        self.current_speed[0] = 70
-        self.current_speed[1] = 110
+        #self.current_speed[0] = 70
+        #self.current_speed[1] = 110
+        self.car_database['keyboard_speed_forward'] = 70
+        self.car_database['keyboard_speed_backward'] = 110
         self.console.insert(index=self.consoleposition, text=" 30% of maximum car speed is set.\n\n")
         self.consoleposition += 2
         self.console.configure(state="disabled")
@@ -252,8 +262,10 @@ class App(customtkinter.CTk):
 
     def radio_button_2(self):
         self.console.configure(state="normal")
-        self.current_speed[0] = 40
-        self.current_speed[1] = 140
+        #self.current_speed[0] = 40
+        #self.current_speed[1] = 140
+        self.car_database['keyboard_speed_forward'] = 40
+        self.car_database['keyboard_speed_backward'] = 140
         self.console.insert(index=self.consoleposition, text=" 60% of maximum car speed is set.\n\n")
         self.consoleposition += 2
         self.console.configure(state="disabled")
@@ -261,8 +273,10 @@ class App(customtkinter.CTk):
 
     def radio_button_3(self):
         self.console.configure(state="normal")
-        self.current_speed[0] = 10
-        self.current_speed[1] = 170
+        #self.current_speed[0] = 10
+        #self.current_speed[1] = 170
+        self.car_database['keyboard_speed_forward'] = 10
+        self.car_database['keyboard_speed_backward'] = 170
         self.console.insert(index=self.consoleposition, text=" 100% of maximum car speed is set.\n\n")
         self.consoleposition += 2
         self.console.configure(state="disabled")
@@ -319,9 +333,9 @@ class App(customtkinter.CTk):
     def key_press(self, event):
         if self.which_window[0] == 2:
             if event.char == "w":
-                self.speed_data[1] = self.current_speed[0]
+                self.speed_data[1] = self.car_database['keyboard_speed_forward']
             elif event.char == "s":
-                self.speed_data[1] = self.current_speed[1]
+                self.speed_data[1] = self.car_database['keyboard_speed_backward']
             elif event.char == "a":
                 self.speed_data[0] = 140
             elif event.char == "d":
