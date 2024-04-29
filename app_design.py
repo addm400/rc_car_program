@@ -21,6 +21,12 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
+        # creating object to convert values from joystick axis to values to control micro servo
+        self.conversion_sys = ConversionSys()
+
+        # creating object to handle bluetooth communication with the car
+        self.bluetooth = Blut()
+
         # binding key press and release
         self.bind('<Key>', self.key_press)
         self.bind("<KeyRelease>", self.key_release)
@@ -32,6 +38,9 @@ class App(customtkinter.CTk):
         # set grid layout 3x2
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
+
+        # tab for holding which window is currently displayed (1/2/3)
+        self.which_window = [1]
 
         # values used to adjust size of images in canvas
         self.image_database = {
@@ -52,6 +61,14 @@ class App(customtkinter.CTk):
             "x_home": 98,
             "y_home": 97,
             "end_value": 195
+        }
+
+        # a dictionary to store data for car controling
+        self.car_database = {
+            "keyboard_speed_forward": 70,
+            "keyboard_speed_backward": 110,
+            "current_speed_x": 180,
+            "current_speed_y": 90,
         }
 
         # load images that will be used later
@@ -194,29 +211,6 @@ class App(customtkinter.CTk):
         # select default frame
         self.select_frame_by_name("home")
 
-        """Car control"""
-
-        self.car_database = {
-            "keyboard_speed_forward": 70,
-            "keyboard_speed_backward": 110,
-            "current_speed_x": 180,
-            "current_speed_y": 90,
-        }
-
-        # initial speed value of a car for keyboard steering
-        self.current_speed = [70, 110]
-        # w przód i w tył
-
-        # tab for holding speed data which will be sent to the car
-        self.speed_data = [180, 90]
-
-        # tab for holding which window is currently displayed (1/2/3)
-        self.which_window = [1]
-
-        self.conversion_sys = ConversionSys()
-
-        self.bluetooth = Blut()
-
     def select_frame_by_name(self, name):
         # set button color for selected button
         self.home_button.configure(fg_color=("gray75", "gray25") if name == "home" else "transparent")
@@ -251,8 +245,6 @@ class App(customtkinter.CTk):
 
     def radio_button_1(self):
         self.console.configure(state="normal")
-        #self.current_speed[0] = 70
-        #self.current_speed[1] = 110
         self.car_database['keyboard_speed_forward'] = 70
         self.car_database['keyboard_speed_backward'] = 110
         self.console.insert(index=self.consoleposition, text=" 30% of maximum car speed is set.\n\n")
@@ -262,8 +254,6 @@ class App(customtkinter.CTk):
 
     def radio_button_2(self):
         self.console.configure(state="normal")
-        #self.current_speed[0] = 40
-        #self.current_speed[1] = 140
         self.car_database['keyboard_speed_forward'] = 40
         self.car_database['keyboard_speed_backward'] = 140
         self.console.insert(index=self.consoleposition, text=" 60% of maximum car speed is set.\n\n")
@@ -273,8 +263,6 @@ class App(customtkinter.CTk):
 
     def radio_button_3(self):
         self.console.configure(state="normal")
-        #self.current_speed[0] = 10
-        #self.current_speed[1] = 170
         self.car_database['keyboard_speed_forward'] = 10
         self.car_database['keyboard_speed_backward'] = 170
         self.console.insert(index=self.consoleposition, text=" 100% of maximum car speed is set.\n\n")
@@ -320,38 +308,38 @@ class App(customtkinter.CTk):
 
         new_speed = self.conversion_sys.axis_conversion(self.coordinates, self.scaleFactor)
 
-        self.speed_data[0] = new_speed["x_speed"]
-        self.speed_data[1] = new_speed["y_speed"]
+        self.car_database['current_speed_x'] = new_speed["x_speed"]
+        self.car_database['current_speed_y'] = new_speed["y_speed"]
 
     def dropped(self, event):
         self.joystick_board_label.moveto(self.joystick_control_circle,
                                          self.joystick_database["x_home"], self.joystick_database["y_home"])
 
-        self.speed_data[0] = 180
-        self.speed_data[1] = 90
+        self.car_database['current_speed_x'] = 180
+        self.car_database['current_speed_y'] = 90
 
     def key_press(self, event):
         if self.which_window[0] == 2:
             if event.char == "w":
-                self.speed_data[1] = self.car_database['keyboard_speed_forward']
+                self.car_database['current_speed_y'] = self.car_database['keyboard_speed_forward']
             elif event.char == "s":
-                self.speed_data[1] = self.car_database['keyboard_speed_backward']
+                self.car_database['current_speed_y'] = self.car_database['keyboard_speed_backward']
             elif event.char == "a":
-                self.speed_data[0] = 140
+                self.car_database['current_speed_x'] = 140
             elif event.char == "d":
-                self.speed_data[0] = 220
+                self.car_database['current_speed_x'] = 220
 
     def key_release(self, event):
 
         if self.which_window[0] == 2:
             if event.char == "w":
-                self.speed_data[1] = 90
+                self.car_database['current_speed_y'] = 90
             elif event.char == "s":
-                self.speed_data[1] = 90
+                self.car_database['current_speed_y'] = 90
             elif event.char == "a":
-                self.speed_data[0] = 180
+                self.car_database['current_speed_x'] = 180
             elif event.char == "d":
-                self.speed_data[0] = 180
+                self.car_database['current_speed_x'] = 180
 
     """periodic function for sending/printing data which control the car"""
     def printer(self):
@@ -376,8 +364,8 @@ class App(customtkinter.CTk):
 
 
     def trans(self):
-        #self.bluetooth.transmission(self.speed_data[1])
-        print(self.speed_data)
+        #self.bluetooth.transmission(self.car_database['current_speed_y'])
+        print(self.car_database['current_speed_x'], self.car_database['current_speed_y'])
         self.alarm = self.after(10, self.trans)
 
     """def change_scaling_event(self, new_scaling: str):
