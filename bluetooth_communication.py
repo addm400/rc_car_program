@@ -1,6 +1,4 @@
 from pyfirmata2 import Arduino, SERVO
-import serial
-import time
 
 
 class Blut:

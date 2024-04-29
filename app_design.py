@@ -7,7 +7,7 @@ import os
 import ctypes
 from threading import Thread
 
-from blut import *
+from bluetooth_communication import *
 from conversion import *
 from ports import *
 
@@ -20,6 +20,10 @@ Main file for RC control car program
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
+
+        # binding key press and release
+        self.bind('<Key>', self.key_press)
+        self.bind("<KeyRelease>", self.key_release)
 
         self.title("RC car control panel")
         self.geometry("800x500")
@@ -191,21 +195,17 @@ class App(customtkinter.CTk):
         self.select_frame_by_name("home")
 
         """Car control"""
-        # initial speed value of a car
+        # initial speed value of a car for keyboard steering
         self.current_speed = [70, 110]
         # w przód i w tył
 
         # tab for holding speed data which will be sent to the car
         self.speed_data = [180, 90]
 
-        # binding key press and release
-        self.bind('<Key>', self.key_press)
-        self.bind("<KeyRelease>", self.key_release)
-
         # tab for holding which window is currently displayed (1/2/3)
         self.which_window = [1]
 
-        self.conv_sys = ConversionSys()
+        self.conversion_sys = ConversionSys()
 
         self.bluetooth = Blut()
 
@@ -304,7 +304,7 @@ class App(customtkinter.CTk):
         self.coordinates[0] = int(self.coordinates[0])
         self.coordinates[1] = int(self.coordinates[1])
 
-        new_speed = self.conv_sys.axis_conversion(self.coordinates, self.scaleFactor)
+        new_speed = self.conversion_sys.axis_conversion(self.coordinates, self.scaleFactor)
 
         self.speed_data[0] = new_speed["x_speed"]
         self.speed_data[1] = new_speed["y_speed"]
