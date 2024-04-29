@@ -277,6 +277,9 @@ class App(customtkinter.CTk):
         self.console.see("end")
 
     # handling beginning of drag motion
+    """
+    niektóre wartości stąd można przerzucić do init, jutro się obaczy
+    """
     def drag_start(self, event):
         self.coordinates = self.joystick_board_label.coords(self.joystick_control_circle)
         self.x_pos = event.x  # tutej gdzieś można dopisać lnijke ktora usunałęm, może jostick nie bedzie uciekał
