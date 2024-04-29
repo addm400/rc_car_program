@@ -54,11 +54,11 @@ class App(customtkinter.CTk):
         self.home_image = customtkinter.CTkImage(dark_image=Image.open(os.path.join(image_path, "home_pic.png")), size=(20, 20))
         self.chat_image = customtkinter.CTkImage(dark_image=Image.open(os.path.join(image_path, "keyboard_pic.png")), size=(20, 20))
         self.add_user_image = customtkinter.CTkImage(dark_image=Image.open(os.path.join(image_path, "joystick_pic.png")), size=(20, 20))
-        self.keyboard_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "strzalki.png")), size=(251, 242))
+        self.keyboard_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "strzalki.png")), size=(239, 220))
 
         # create navigation frame
         self.navigation_frame = customtkinter.CTkFrame(self, corner_radius=0)
-        self.navigation_frame.grid(row=0, column=0, rowspan=2, sticky="nsew")
+        self.navigation_frame.grid(row=0, column=0, rowspan=3, sticky="nsew")
         self.navigation_frame.grid_rowconfigure(4, weight=1)
 
         self.navigation_frame_label = customtkinter.CTkLabel(self.navigation_frame, text="  Control Panel", image=self.logo_image,
@@ -99,10 +99,18 @@ class App(customtkinter.CTk):
         self.optionmenu_1.grid(row=0, column=0, padx=20, pady=(20, 10))
 
         # create textbox/consol no 1
+
+        self.consol_frame = customtkinter.CTkFrame(self, fg_color='#1d1e1e', corner_radius=0)
+        self.consol_frame.grid(row=1, column=1, padx=(20, 20), pady=(20, 0), sticky="nsew",)
+
+        self.console_name = customtkinter.CTkLabel(master=self.consol_frame, text="Console",
+                                                        font=customtkinter.CTkFont(size=13))
+        self.console_name.grid(row=0, column=0, padx=(10, 20), pady=(0, 0), sticky="nsew")
+
         self.console1position = 5.0
-        self.textbox1 = customtkinter.CTkTextbox(self, width=100, height=150)
-        self.textbox1.grid(row=1, column=1, columnspan=2, padx=(20, 20), pady=(20, 20), sticky="nsew")
-        self.textbox1.insert("0.0", "Console\n\n" + "Some info.\n\n")
+        self.textbox1 = customtkinter.CTkTextbox(self, width=100, height=120, corner_radius=0)
+        self.textbox1.grid(row=2, column=1, columnspan=2, padx=(20, 20), pady=(0, 20), sticky="nsew")
+        #self.textbox1.insert("0.0", "\n")
         self.textbox1.configure(state="disabled")
 
         # create second frame
@@ -112,11 +120,14 @@ class App(customtkinter.CTk):
         self.keyboard_image_label = customtkinter.CTkLabel(self.second_frame, text="", image=self.keyboard_image)
         self.keyboard_image_label.grid(row=0, column=0, padx=(20, 0), pady=(0, 0))
 
-        self.label_tab_2 = customtkinter.CTkLabel(self.second_frame, text="W – MOVE FORWARD\n" +
+        self.label_tab_2_frame = customtkinter.CTkFrame(self.second_frame)
+        self.label_tab_2_frame.grid(row=1, column=0, padx=(20, 12), pady=(0, 15), sticky="nsew")
+
+        self.label_tab_2 = customtkinter.CTkLabel(self.label_tab_2_frame, text="W – MOVE FORWARD\n" +
                                                                           "S – MOVE BACKWARD\n" +
                                                                           "A – TURN LEFT \n" +
                                                                           "D – TURN RIGHT")
-        self.label_tab_2.grid(row=1, column=0, padx=(20, 12), pady=(0, 8))
+        self.label_tab_2.grid(row=0, column=0, padx=(60, 0), pady=(15, 15))
 
         # create textbox/console no 2
         """self.console2position = 5.0
@@ -255,7 +266,7 @@ class App(customtkinter.CTk):
         self.textbox1.configure(state="normal")
         self.current_speed[0] = 70
         self.current_speed[1] = 110
-        self.textbox1.insert(index=self.console1position, text="30% of maximum car speed is set.\n\n")
+        self.textbox1.insert(index=self.console1position, text=" 30% of maximum car speed is set.\n\n")
         self.console1position += 2
         self.textbox1.configure(state="disabled")
         self.textbox1.see("end")
@@ -264,7 +275,7 @@ class App(customtkinter.CTk):
         self.textbox1.configure(state="normal")
         self.current_speed[0] = 40
         self.current_speed[1] = 140
-        self.textbox1.insert(index=self.console1position, text="60% of maximum car speed is set.\n\n")
+        self.textbox1.insert(index=self.console1position, text=" 60% of maximum car speed is set.\n\n")
         self.console1position += 2
         self.textbox1.configure(state="disabled")
         self.textbox1.see("end")
@@ -273,7 +284,7 @@ class App(customtkinter.CTk):
         self.textbox1.configure(state="normal")
         self.current_speed[0] = 10
         self.current_speed[1] = 170
-        self.textbox1.insert(index=self.console1position, text="100% of maximum car speed is set.\n\n")
+        self.textbox1.insert(index=self.console1position, text=" 100% of maximum car speed is set.\n\n")
         self.console1position += 2
         self.textbox1.configure(state="disabled")
         self.textbox1.see("end")
