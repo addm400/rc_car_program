@@ -103,6 +103,7 @@ class App(customtkinter.CTk):
         self.textbox1 = customtkinter.CTkTextbox(self, width=100, height=150)
         self.textbox1.grid(row=1, column=1, columnspan=2, padx=(20, 20), pady=(20, 20), sticky="nsew")
         self.textbox1.insert("0.0", "Console\n\n" + "Some info.\n\n")
+        self.textbox1.configure(state="disabled")
 
         # create second frame
         self.second_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
@@ -251,22 +252,31 @@ class App(customtkinter.CTk):
         self.which_window[0] = 3
 
     def radio_button_1(self):
+        self.textbox1.configure(state="normal")
         self.current_speed[0] = 70
         self.current_speed[1] = 110
         self.textbox1.insert(index=self.console1position, text="30% of maximum car speed is set.\n\n")
         self.console1position += 2
+        self.textbox1.configure(state="disabled")
+        self.textbox1.see("end")
 
     def radio_button_2(self):
+        self.textbox1.configure(state="normal")
         self.current_speed[0] = 40
         self.current_speed[1] = 140
         self.textbox1.insert(index=self.console1position, text="60% of maximum car speed is set.\n\n")
         self.console1position += 2
+        self.textbox1.configure(state="disabled")
+        self.textbox1.see("end")
 
     def radio_button_3(self):
+        self.textbox1.configure(state="normal")
         self.current_speed[0] = 10
         self.current_speed[1] = 170
         self.textbox1.insert(index=self.console1position, text="100% of maximum car speed is set.\n\n")
         self.console1position += 2
+        self.textbox1.configure(state="disabled")
+        self.textbox1.see("end")
 
     # wracanie joysticka na środek układu
 
