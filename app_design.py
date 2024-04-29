@@ -1,18 +1,19 @@
-import customtkinter
 import tkinter
+import customtkinter
 from tkinter import *
-import os
 from PIL import Image, ImageTk
+
+import os
 import ctypes
-from conversion import *
-import ports
-from blut import *
 from threading import Thread
+
+from blut import *
+from conversion import *
+from ports import *
 
 
 """
 Main file for RC control car program
-everything is working on Laptop
 """
 
 
@@ -24,10 +25,11 @@ class App(customtkinter.CTk):
         self.geometry("800x500")
         self.resizable(False, False)
 
-        # set grid layout 1x2
+        # set grid layout 3x2
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
 
+        # values used to adjust size of images in canvas
         self.image_database = {
             "board_size_100": 275,
             "board_size_150": 436,
@@ -35,26 +37,32 @@ class App(customtkinter.CTk):
             "joystick_size_150": 120,
         }
 
+        # values used to adjust size of canvas
         self.canvas_database = {
             "canvas_width_100": 275, "canvas_height_100": 275,
             "canvas_width_150": 436, "canvas_height_150": 436,
-
         }
 
+        # a dictionary to store data for joystick positioning
         self.joystick_database = {
             "x_home": 98,
             "y_home": 97,
             "end_value": 195
-
         }
 
-        # load images with light and dark mode image
+        # load images that will be used later
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "test_images")
         self.logo_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "icon.png")), size=(45, 30))
         self.home_image = customtkinter.CTkImage(dark_image=Image.open(os.path.join(image_path, "home_pic.png")), size=(20, 20))
         self.chat_image = customtkinter.CTkImage(dark_image=Image.open(os.path.join(image_path, "keyboard_pic.png")), size=(20, 20))
         self.add_user_image = customtkinter.CTkImage(dark_image=Image.open(os.path.join(image_path, "joystick_pic.png")), size=(20, 20))
         self.keyboard_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "strzalki.png")), size=(239, 220))
+
+        self.strzalki = Image.open('test_images//arrows.png')
+        self.strzalki = self.strzalki.resize((self.image_database["board_size_100"], self.image_database["board_size_100"]))
+
+        self.kolko = Image.open('test_images//kolko.png')
+        self.kolko = self.kolko.resize((self.image_database["joystick_size_100"], self.image_database["joystick_size_100"]))
 
         # create navigation frame
         self.navigation_frame = customtkinter.CTkFrame(self, corner_radius=0)
@@ -84,7 +92,7 @@ class App(customtkinter.CTk):
         self.home_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.home_frame.grid_columnconfigure(0, weight=1)
 
-        self.available_ports = ports.Port()
+        self.available_ports = Port()
 
         self.sidebar_button_1 = customtkinter.CTkButton(self.home_frame, command=self.refresh_button_event,
                                                         text="Refresh")
@@ -168,11 +176,7 @@ class App(customtkinter.CTk):
                                      height=self.canvas_database["canvas_height_100"], highlightthickness=0)
         self.joystick_board.grid(row=0, column=0, pady=(20, 0), padx=(22, 306))
 
-        self.strzalki = Image.open('test_images//arrows.png')
-        self.strzalki = self.strzalki.resize((self.image_database["board_size_100"], self.image_database["board_size_100"]))
 
-        self.kolko = Image.open('test_images//kolko.png')
-        self.kolko = self.kolko.resize((self.image_database["joystick_size_100"], self.image_database["joystick_size_100"]))
 
         self.scaling_image()
 
