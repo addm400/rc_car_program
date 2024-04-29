@@ -58,7 +58,7 @@ class App(customtkinter.CTk):
 
         # create navigation frame
         self.navigation_frame = customtkinter.CTkFrame(self, corner_radius=0)
-        self.navigation_frame.grid(row=0, column=0, sticky="nsew")
+        self.navigation_frame.grid(row=0, column=0, rowspan=2, sticky="nsew")
         self.navigation_frame.grid_rowconfigure(4, weight=1)
 
         self.navigation_frame_label = customtkinter.CTkLabel(self.navigation_frame, text="  Control Panel", image=self.logo_image,
@@ -99,59 +99,61 @@ class App(customtkinter.CTk):
 
         # create textbox/consol no 1
         self.console1position = 5.0
-        self.textbox1 = customtkinter.CTkTextbox(self, width=360, height=50)
-        self.textbox1.grid(row=0, column=1, padx=(20, 12), pady=(330, 20), sticky="nsew")
+        self.textbox1 = customtkinter.CTkTextbox(self, width=100, height=150)
+        self.textbox1.grid(row=1, column=1, columnspan=2, padx=(20, 12), pady=(20, 20), sticky="nsew")
         self.textbox1.insert("0.0", "Console\n\n" + "Some info.\n\n")
 
         # create second frame
         self.second_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.second_frame.grid_columnconfigure(0, weight=1)
 
         self.keyboard_image_label = customtkinter.CTkLabel(self.second_frame, text="", image=self.keyboard_image)
-        self.keyboard_image_label.grid(row=0, column=1, padx=(20, 0), pady=(0, 0))
+        self.keyboard_image_label.grid(row=0, column=0, padx=(20, 0), pady=(0, 0))
 
         self.label_tab_2 = customtkinter.CTkLabel(self.second_frame, text="W – MOVE FORWARD\n" +
                                                                           "S – MOVE BACKWARD\n" +
                                                                           "A – TURN LEFT \n" +
                                                                           "D – TURN RIGHT")
-        self.label_tab_2.grid(row=1, column=1, padx=(20, 20), pady=(0, 8))
+        self.label_tab_2.grid(row=1, column=0, padx=(20, 12), pady=(0, 8))
 
         # create textbox/console no 2
-        self.console2position = 5.0
+        """self.console2position = 5.0
         self.textbox2 = customtkinter.CTkTextbox(self.second_frame, width=569, height=150)
         self.textbox2.grid(row=2, column=1, columnspan=2, padx=(20, 20), pady=(20, 0))
-        self.textbox2.insert("0.0", "Console\n\n" + "Some info.\n\n")
+        self.textbox2.insert("0.0", "Console\n\n" + "Some info.\n\n")"""
 
         # radiobutton frame
         self.radiobutton_frame = customtkinter.CTkFrame(self.second_frame)
-        self.radiobutton_frame.grid(row=0, column=2, rowspan=2, padx=(20, 20), pady=(20, 0), sticky="nsew")
+        self.radiobutton_frame.grid(row=0, column=1, rowspan=2, padx=(20, 20), pady=(20, 0), sticky="nsew")
         self.radio_var = tkinter.IntVar(value=0)
         self.label_radio_group = customtkinter.CTkLabel(master=self.radiobutton_frame, text="Speed Control", font=customtkinter.CTkFont(size=20))
-        self.label_radio_group.grid(row=0, column=2, columnspan=1, padx=(70, 0), pady=(50, 20), sticky="")
+        self.label_radio_group.grid(row=0, column=1, columnspan=1, padx=(70, 0), pady=(50, 20), sticky="nsew")
 
         self.radio_button_1 = customtkinter.CTkRadioButton(master=self.radiobutton_frame, variable=self.radio_var, value=0,
                                                            text="30% of MAX SPEED", font=customtkinter.CTkFont(size=13), command=self.radio_button_1)
-        self.radio_button_1.grid(row=1, column=2, pady=10, padx=(70, 0), sticky="n")
+        self.radio_button_1.grid(row=1, column=1, pady=10, padx=(70, 0), sticky="n")
 
         self.radio_button_2 = customtkinter.CTkRadioButton(master=self.radiobutton_frame, variable=self.radio_var, value=1,
                                                            text="60% of MAX SPEED", font=customtkinter.CTkFont(size=13), command=self.radio_button_2)
-        self.radio_button_2.grid(row=2, column=2, pady=10, padx=(70, 0), sticky="n")
+        self.radio_button_2.grid(row=2, column=1, pady=10, padx=(70, 0), sticky="n")
 
         self.radio_button_3 = customtkinter.CTkRadioButton(master=self.radiobutton_frame, variable=self.radio_var, value=2,
                                                            text="100% of MAX SPEED", font=customtkinter.CTkFont(size=13), command=self.radio_button_3)
-        self.radio_button_3.grid(row=3, column=2, pady=10, padx=(76, 0), sticky="n")
+        self.radio_button_3.grid(row=3, column=1, pady=10, padx=(76, 0), sticky="n")
 
         # create third frame
         self.dragInfo_x = 0
         self.dragInfo_y = 0
 
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.third_frame.grid_columnconfigure(0, weight=1)
 
         # getting current scale factor of windows itself
         self.scaleFactor = (ctypes.windll.shcore.GetScaleFactorForDevice(0) / 100)
 
         self.joystick_board = Canvas(self.third_frame, width=self.canvas_database["canvas_width_100"],
                                      height=self.canvas_database["canvas_height_100"], highlightthickness=0)
-        self.joystick_board.grid(row=0, column=0, pady=(20, 0), padx=(20, 140), sticky="nsew")
+        self.joystick_board.grid(row=0, column=0, pady=(20, 0), padx=(20, 306), sticky="nswe")
 
         self.strzalki = Image.open('test_images//arrows.png')
         self.strzalki = self.strzalki.resize((self.image_database["board_size_100"], self.image_database["board_size_100"]))
@@ -175,10 +177,10 @@ class App(customtkinter.CTk):
         self.joystick_board.tag_bind(self.joystick_steering_label, "<ButtonRelease-1>", self.dropped)
 
         # create textbox/consol no 3
-        self.console3position = 5.0
+        """self.console3position = 5.0
         self.textbox3 = customtkinter.CTkTextbox(self.third_frame, width=569, height=150)
         self.textbox3.grid(row=1, column=0, columnspan=2, padx=(20, 20), pady=(30, 20), sticky="nsew")
-        self.textbox3.insert("0.0", "Console\n\n" + "Some info.\n\n")
+        self.textbox3.insert("0.0", "Console\n\n" + "Some info.\n\n")"""
 
         # select default frame
         self.select_frame_by_name("home")
@@ -250,20 +252,20 @@ class App(customtkinter.CTk):
     def radio_button_1(self):
         self.current_speed[0] = 70
         self.current_speed[1] = 110
-        self.textbox2.insert(index=self.console2position, text="30% of maximum car speed is set.\n\n")
-        self.console2position += 2
+        self.textbox1.insert(index=self.console1position, text="30% of maximum car speed is set.\n\n")
+        self.console1position += 2
 
     def radio_button_2(self):
         self.current_speed[0] = 40
         self.current_speed[1] = 140
-        self.textbox2.insert(index=self.console2position, text="60% of maximum car speed is set.\n\n")
-        self.console2position += 2
+        self.textbox1.insert(index=self.console1position, text="60% of maximum car speed is set.\n\n")
+        self.console1position += 2
 
     def radio_button_3(self):
         self.current_speed[0] = 10
         self.current_speed[1] = 170
-        self.textbox2.insert(index=self.console2position, text="100% of maximum car speed is set.\n\n")
-        self.console2position += 2
+        self.textbox1.insert(index=self.console1position, text="100% of maximum car speed is set.\n\n")
+        self.console1position += 2
 
     # wracanie joysticka na środek układu
 
@@ -338,7 +340,8 @@ class App(customtkinter.CTk):
 
     """periodic function for sending/printing data which control the car"""
     def printer(self):
-        port = self.available_ports.scanner()[0]
+        self.trans()
+        """port = self.available_ports.scanner()[0]
         if len(port) > 0:
             self.bluetooth.define_port(self.available_ports.scanner()[0])
             try:
@@ -354,12 +357,12 @@ class App(customtkinter.CTk):
                 self.bluetooth.board_setup()
                 self.trans()
         else:
-            print('check connection')
+            print('check connection')"""
 
 
     def trans(self):
-        self.bluetooth.transmission(self.speed_data[1])
-        #print(self.speed_data)
+        #self.bluetooth.transmission(self.speed_data[1])
+        print(self.speed_data)
         self.alarm = self.after(10, self.trans)
 
     def change_scaling_event(self, new_scaling: str):
