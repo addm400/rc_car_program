@@ -53,9 +53,9 @@ class App(customtkinter.CTk):
         # load images that will be used later
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "test_images")
         self.logo_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "icon.png")), size=(45, 30))
-        self.home_image = customtkinter.CTkImage(dark_image=Image.open(os.path.join(image_path, "home_pic.png")), size=(20, 20))
-        self.chat_image = customtkinter.CTkImage(dark_image=Image.open(os.path.join(image_path, "keyboard_pic.png")), size=(20, 20))
-        self.add_user_image = customtkinter.CTkImage(dark_image=Image.open(os.path.join(image_path, "joystick_pic.png")), size=(20, 20))
+        self.home_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "home_pic.png")), size=(20, 20))
+        self.chat_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "keyboard_pic.png")), size=(20, 20))
+        self.add_user_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "joystick_pic.png")), size=(20, 20))
         self.keyboard_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "strzalki.png")), size=(239, 220))
 
         self.strzalki = Image.open('test_images//arrows.png')
@@ -64,7 +64,7 @@ class App(customtkinter.CTk):
         self.kolko = Image.open('test_images//kolko.png')
         self.kolko = self.kolko.resize((self.image_database["joystick_size_100"], self.image_database["joystick_size_100"]))
 
-        # create navigation frame
+        # create navigation frame on the left hand side
         self.navigation_frame = customtkinter.CTkFrame(self, corner_radius=0)
         self.navigation_frame.grid(row=0, column=0, rowspan=3, sticky="nsew")
         self.navigation_frame.grid_rowconfigure(4, weight=1)
@@ -78,15 +78,15 @@ class App(customtkinter.CTk):
                                                    image=self.home_image, anchor="w", command=self.home_button_event)
         self.home_button.grid(row=1, column=0, sticky="ew")
 
-        self.frame_2_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40, border_spacing=10, text="Keyboard",
-                                                      fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                      image=self.chat_image, anchor="w", command=self.frame_2_button_event)
-        self.frame_2_button.grid(row=2, column=0, sticky="ew")
+        self.keyboard_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40, border_spacing=10, text="Keyboard",
+                                                       fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
+                                                       image=self.chat_image, anchor="w", command=self.keyboard_button_event)
+        self.keyboard_button.grid(row=2, column=0, sticky="ew")
 
-        self.frame_3_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40, border_spacing=10, text="Joystick",
-                                                      fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                      image=self.add_user_image, anchor="w", command=self.frame_3_button_event)
-        self.frame_3_button.grid(row=3, column=0, sticky="ew")
+        self.joystick_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40, border_spacing=10, text="Joystick",
+                                                       fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
+                                                       image=self.add_user_image, anchor="w", command=self.joystick_button_event)
+        self.joystick_button.grid(row=3, column=0, sticky="ew")
 
         # create home frame
         self.home_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
@@ -94,19 +94,18 @@ class App(customtkinter.CTk):
 
         self.available_ports = Port()
 
-        self.sidebar_button_1 = customtkinter.CTkButton(self.home_frame, command=self.refresh_button_event,
-                                                        text="Refresh")
-        self.sidebar_button_1.grid(row=1, column=0, padx=20, pady=10)
-
-        self.sidebar_button_2 = customtkinter.CTkButton(self.home_frame, command=self.connect_button_event,
-                                                        text="Connect", fg_color="green")
-        self.sidebar_button_2.grid(row=2, column=0, padx=20, pady=10)
+        self.connect_button = customtkinter.CTkButton(self.home_frame, command=self.connect_button_event,
+                                                      text="Connect", fg_color="green")
+        self.connect_button.grid(row=1, column=0, padx=20, pady=10)
 
         self.optionmenu_1 = customtkinter.CTkOptionMenu(self.home_frame, dynamic_resizing=False,
                                                         values=self.available_ports.scanner(), command=self.com_menu_event)
         self.optionmenu_1.grid(row=0, column=0, padx=20, pady=(20, 10))
 
-        # create textbox/consol no 1
+        # create textbox/consol
+
+        # a variable for holding current position of cursor in console
+        self.consoleposition = 5.0
 
         self.consol_frame = customtkinter.CTkFrame(self, fg_color='#1d1e1e', corner_radius=0)
         self.consol_frame.grid(row=1, column=1, padx=(20, 20), pady=(20, 0), sticky="nsew",)
@@ -115,11 +114,9 @@ class App(customtkinter.CTk):
                                                         font=customtkinter.CTkFont(size=13))
         self.console_name.grid(row=0, column=0, padx=(10, 20), pady=(0, 0), sticky="nsew")
 
-        self.console1position = 5.0
-        self.textbox1 = customtkinter.CTkTextbox(self, width=100, height=120, corner_radius=0)
-        self.textbox1.grid(row=2, column=1, columnspan=2, padx=(20, 20), pady=(0, 20), sticky="nsew")
-        #self.textbox1.insert("0.0", "\n")
-        self.textbox1.configure(state="disabled")
+        self.console = customtkinter.CTkTextbox(self, width=100, height=120, corner_radius=0)
+        self.console.grid(row=2, column=1, columnspan=2, padx=(20, 20), pady=(0, 20), sticky="nsew")
+        self.console.configure(state="disabled")
 
         # create second frame
         self.second_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
@@ -136,12 +133,6 @@ class App(customtkinter.CTk):
                                                                           "A – TURN LEFT \n" +
                                                                           "D – TURN RIGHT")
         self.label_tab_2.grid(row=0, column=0, padx=(70, 0), pady=(15, 15))
-
-        # create textbox/console no 2
-        """self.console2position = 5.0
-        self.textbox2 = customtkinter.CTkTextbox(self.second_frame, width=569, height=150)
-        self.textbox2.grid(row=2, column=1, columnspan=2, padx=(20, 20), pady=(20, 0))
-        self.textbox2.insert("0.0", "Console\n\n" + "Some info.\n\n")"""
 
         # radiobutton frame
         self.radiobutton_frame = customtkinter.CTkFrame(self.second_frame)
@@ -163,21 +154,18 @@ class App(customtkinter.CTk):
         self.radio_button_3.grid(row=3, column=1, pady=10, padx=(76, 50), sticky="n")
 
         # create third frame
-        self.dragInfo_x = 0
-        self.dragInfo_y = 0
+
+        # getting current scale factor of windows for image adjusting
+        self.scaleFactor = (ctypes.windll.shcore.GetScaleFactorForDevice(0) / 100)
 
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.third_frame.grid_columnconfigure(0, weight=1)
-
-        # getting current scale factor of windows itself
-        self.scaleFactor = (ctypes.windll.shcore.GetScaleFactorForDevice(0) / 100)
 
         self.joystick_board = Canvas(self.third_frame, width=self.canvas_database["canvas_width_100"],
                                      height=self.canvas_database["canvas_height_100"], highlightthickness=0)
         self.joystick_board.grid(row=0, column=0, pady=(20, 0), padx=(22, 306))
 
-
-
+        # scaling images based on scale factor
         self.scaling_image()
 
         self.bgphoto = ImageTk.PhotoImage(self.strzalki)
@@ -192,12 +180,6 @@ class App(customtkinter.CTk):
         self.joystick_board.tag_bind(self.joystick_steering_label, "<Button-1>", self.drag_start)
         self.joystick_board.tag_bind(self.joystick_steering_label, "<B1-Motion>", self.drag_motion)
         self.joystick_board.tag_bind(self.joystick_steering_label, "<ButtonRelease-1>", self.dropped)
-
-        # create textbox/consol no 3
-        """self.console3position = 5.0
-        self.textbox3 = customtkinter.CTkTextbox(self.third_frame, width=569, height=150)
-        self.textbox3.grid(row=1, column=0, columnspan=2, padx=(20, 20), pady=(30, 20), sticky="nsew")
-        self.textbox3.insert("0.0", "Console\n\n" + "Some info.\n\n")"""
 
         # select default frame
         self.select_frame_by_name("home")
@@ -214,31 +196,18 @@ class App(customtkinter.CTk):
         self.bind('<Key>', self.key_press)
         self.bind("<KeyRelease>", self.key_release)
 
-        # starting periodic function to pass data
-        #self.alarm = self.after(100, self.printer)
-
         # tab for holding which window is currently displayed (1/2/3)
         self.which_window = [1]
 
-        """self.scaling_label = customtkinter.CTkLabel(self.navigation_frame, text="UI Scaling:", anchor="w")
-        self.scaling_label.grid(row=7, column=0, padx=20, pady=(10, 0))
-        self.scaling_optionemenu = customtkinter.CTkOptionMenu(self.navigation_frame,
-                                                               values=["80%", "90%", "100%", "110%", "120%"],
-                                                               command=self.change_scaling_event)
-        self.scaling_optionemenu.grid(row=8, column=0, padx=20, pady=(10, 20))"""
-
         self.conv_sys = ConversionSys()
 
-        #print(self.scaleFactor)
-
         self.bluetooth = Blut()
-
 
     def select_frame_by_name(self, name):
         # set button color for selected button
         self.home_button.configure(fg_color=("gray75", "gray25") if name == "home" else "transparent")
-        self.frame_2_button.configure(fg_color=("gray75", "gray25") if name == "keyboard" else "transparent")
-        self.frame_3_button.configure(fg_color=("gray75", "gray25") if name == "joystick" else "transparent")
+        self.keyboard_button.configure(fg_color=("gray75", "gray25") if name == "keyboard" else "transparent")
+        self.joystick_button.configure(fg_color=("gray75", "gray25") if name == "joystick" else "transparent")
 
         # show selected frame
         if name == "home":
@@ -258,40 +227,40 @@ class App(customtkinter.CTk):
         self.select_frame_by_name("home")
         self.which_window[0] = 1
 
-    def frame_2_button_event(self):
+    def keyboard_button_event(self):
         self.select_frame_by_name("keyboard")
         self.which_window[0] = 2
 
-    def frame_3_button_event(self):
+    def joystick_button_event(self):
         self.select_frame_by_name("joystick")
         self.which_window[0] = 3
 
     def radio_button_1(self):
-        self.textbox1.configure(state="normal")
+        self.console.configure(state="normal")
         self.current_speed[0] = 70
         self.current_speed[1] = 110
-        self.textbox1.insert(index=self.console1position, text=" 30% of maximum car speed is set.\n\n")
-        self.console1position += 2
-        self.textbox1.configure(state="disabled")
-        self.textbox1.see("end")
+        self.console.insert(index=self.consoleposition, text=" 30% of maximum car speed is set.\n\n")
+        self.consoleposition += 2
+        self.console.configure(state="disabled")
+        self.console.see("end")
 
     def radio_button_2(self):
-        self.textbox1.configure(state="normal")
+        self.console.configure(state="normal")
         self.current_speed[0] = 40
         self.current_speed[1] = 140
-        self.textbox1.insert(index=self.console1position, text=" 60% of maximum car speed is set.\n\n")
-        self.console1position += 2
-        self.textbox1.configure(state="disabled")
-        self.textbox1.see("end")
+        self.console.insert(index=self.consoleposition, text=" 60% of maximum car speed is set.\n\n")
+        self.consoleposition += 2
+        self.console.configure(state="disabled")
+        self.console.see("end")
 
     def radio_button_3(self):
-        self.textbox1.configure(state="normal")
+        self.console.configure(state="normal")
         self.current_speed[0] = 10
         self.current_speed[1] = 170
-        self.textbox1.insert(index=self.console1position, text=" 100% of maximum car speed is set.\n\n")
-        self.console1position += 2
-        self.textbox1.configure(state="disabled")
-        self.textbox1.see("end")
+        self.console.insert(index=self.consoleposition, text=" 100% of maximum car speed is set.\n\n")
+        self.consoleposition += 2
+        self.console.configure(state="disabled")
+        self.console.see("end")
 
     # wracanie joysticka na środek układu
 
@@ -414,9 +383,6 @@ class App(customtkinter.CTk):
 
     def com_menu_event(self, selection):
         print(selection)
-
-    def refresh_button_event(self):
-        print('refresh')
 
     def connect_button_event(self):
         new_thread = Thread(target=self.printer, args=(), daemon=True)
