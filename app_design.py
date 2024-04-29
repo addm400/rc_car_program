@@ -211,6 +211,10 @@ class App(customtkinter.CTk):
         # select default frame
         self.select_frame_by_name("home")
 
+        """
+        ***** The end of __init__ section *****
+        """
+
     def select_frame_by_name(self, name):
         # set button color for selected button
         self.home_button.configure(fg_color=("gray75", "gray25") if name == "home" else "transparent")
@@ -231,6 +235,7 @@ class App(customtkinter.CTk):
         else:
             self.third_frame.grid_forget()
 
+    # handling navigation button events and tracking which window is currently selected
     def home_button_event(self):
         self.select_frame_by_name("home")
         self.which_window[0] = 1
@@ -243,6 +248,7 @@ class App(customtkinter.CTk):
         self.select_frame_by_name("joystick")
         self.which_window[0] = 3
 
+    # handling radio button events and changing car control values that are ready to send to microcontroller
     def radio_button_1(self):
         self.console.configure(state="normal")
         self.car_database['keyboard_speed_forward'] = 70
@@ -270,22 +276,22 @@ class App(customtkinter.CTk):
         self.console.configure(state="disabled")
         self.console.see("end")
 
-    # wracanie joysticka na środek układu
-
+    # handling beginning of drag motion
     def drag_start(self, event):
         self.coordinates = self.joystick_board_label.coords(self.joystick_control_circle)
         self.x_pos = event.x  # tutej gdzieś można dopisać lnijke ktora usunałęm, może jostick nie bedzie uciekał
         self.y_pos = event.y
 
-    # złapanie obiektu myszką
-
+    # handling drag motion
     def drag_motion(self, event):
         win_x = event.x
         win_y = event.y
 
+        # getting the object coords where, there was an event
         x = self.coordinates[0] - self.x_pos + event.x
         y = self.coordinates[1] - self.y_pos + event.y
 
+        # tracking position of the joystick and keeping it within the limits of the board
         if x < 0:
             x = 0
         elif x > self.joystick_database['end_value']:
