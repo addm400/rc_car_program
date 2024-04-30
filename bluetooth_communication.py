@@ -20,8 +20,6 @@ class Blut:
         self.data['port'] = port_value
 
     def start_connection(self):
-
-        print("\n*****CONNECTING STARTED*****")
         self.board = Arduino(self.data['port'])
 
     def board_setup(self):

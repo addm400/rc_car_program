@@ -254,38 +254,30 @@ class App(customtkinter.CTk):
         self.select_frame_by_name("joystick")
         self.which_window[0] = 3
 
+    def console_print(self, text):
+        self.console.configure(state="normal")
+        self.console.insert(index=self.consoleposition, text=" "+text+"\n\n")
+        self.consoleposition += 2
+        self.console.configure(state="disabled")
+        self.console.see("end")
     # handling radio button events and changing car control values that are ready to send to microcontroller
     def radio_button_1(self):
-        self.console.configure(state="normal")
         self.car_database['keyboard_speed_forward'] = 70
         self.car_database['keyboard_speed_backward'] = 110
-        self.console.insert(index=self.consoleposition, text=" 30% of maximum car speed is set.\n\n")
-        self.consoleposition += 2
-        self.console.configure(state="disabled")
-        self.console.see("end")
+        self.console_print("30% of maximum car speed is set")
 
     def radio_button_2(self):
-        self.console.configure(state="normal")
         self.car_database['keyboard_speed_forward'] = 40
         self.car_database['keyboard_speed_backward'] = 140
-        self.console.insert(index=self.consoleposition, text=" 60% of maximum car speed is set.\n\n")
-        self.consoleposition += 2
-        self.console.configure(state="disabled")
-        self.console.see("end")
+        self.console_print("60% of maximum car speed is set")
 
     def radio_button_3(self):
-        self.console.configure(state="normal")
         self.car_database['keyboard_speed_forward'] = 10
         self.car_database['keyboard_speed_backward'] = 170
-        self.console.insert(index=self.consoleposition, text=" 100% of maximum car speed is set.\n\n")
-        self.consoleposition += 2
-        self.console.configure(state="disabled")
-        self.console.see("end")
+        self.console_print("100% of maximum car speed is set")
+
 
     # handling beginning of drag motion
-    """
-    niektóre wartości stąd można przerzucić do init, jutro się obaczy
-    """
     def drag_start(self, event):
         self.coordinates = self.joystick_board_label.coords(self.joystick_control_circle)
         self.x_pos = event.x
@@ -360,34 +352,29 @@ class App(customtkinter.CTk):
 
     # function for checking COM port and enabling bluetooth communication
     def printer(self):
-        #self.trans()
         port = self.bluetooth_module_port.scanner()[0]
+        self.console_print("Connecting started...")
+        # checking if COM port is found
         if len(port) > 0:
             try:
                 self.bluetooth.start_connection()
-                #print("connected")
             except AttributeError as e:
-                print("connection failed")
-                print("check connection")
+                self.console_print("Check connection and try again")
             except:
-                print("connection failed")
-                print("check connection")
+                self.console_print("Check connection and try again")
             else:
-                print("*****CONNECTED*****")
+                self.console_print("Connected")
                 self.bluetooth.board_setup()
                 self.trans()
         else:
-            print('check connection')
+            self.console_print('Check if bluetooth is enabled')
+            self.console_print('Check if car is connected to your device')
 
     # periodic function for sending control data to the car
     def trans(self):
         #self.bluetooth.transmission(self.car_database['current_speed_y'])
         print(self.car_database['current_speed_x'], self.car_database['current_speed_y'])
         self.alarm = self.after(10, self.trans)
-
-    """def change_scaling_event(self, new_scaling: str):
-        new_scaling_float = int(new_scaling.replace("%", "")) / 100
-        customtkinter.set_widget_scaling(new_scaling_float)"""
 
     def scaling_image(self):
         if self.scaleFactor == 1.5:
