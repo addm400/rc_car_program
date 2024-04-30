@@ -377,6 +377,7 @@ class App(customtkinter.CTk):
         self.alarm = self.after(10, self.trans)
 
     def scaling_image(self):
+        """function made to scale images and axis values depending on scale factor of Windows for ex. 100%, 150%"""
         if self.scaleFactor == 1.5:
             self.joystick_board_label.configure(width=self.canvas_database["canvas_width_150"],
                                                 height=self.canvas_database["canvas_height_150"])
@@ -390,7 +391,6 @@ class App(customtkinter.CTk):
 
             self.joystick_database["x_home"] = 157
             self.joystick_database["y_home"] = 156
-
             self.joystick_database['end_value'] = 316
 
     def com_menu_event(self, selection):
