@@ -65,7 +65,7 @@ class App(customtkinter.CTk):
         self.car_database = {
             "keyboard_speed_forward": 70,
             "keyboard_speed_backward": 110,
-            "current_speed_x": 180,
+            "current_speed_x": 70,
             "current_speed_y": 90,
             "connection_status": "not connected"
         }
@@ -348,7 +348,7 @@ class App(customtkinter.CTk):
         self.joystick_board_label.moveto(self.joystick_control_circle,
                                          self.joystick_database["x_home"], self.joystick_database["y_home"])
 
-        self.car_database['current_speed_x'] = 180
+        self.car_database['current_speed_x'] = 70
         self.car_database['current_speed_y'] = 90
 
     def key_press(self, event):
@@ -370,13 +370,13 @@ class App(customtkinter.CTk):
             elif event.char == "s":
                 self.car_database['current_speed_y'] = 90
             elif event.char == "a":
-                self.car_database['current_speed_x'] = 180
+                self.car_database['current_speed_x'] = 70
             elif event.char == "d":
-                self.car_database['current_speed_x'] = 180
+                self.car_database['current_speed_x'] = 70
 
     # function for checking COM port and enabling bluetooth communication
     def printer(self):
-        port = self.bluetooth_module_port.scanner()
+        """port = self.bluetooth_module_port.scanner()
         self.console_print("Connecting started...")
         # checking if COM port is found
         if len(port) > 0:
@@ -396,12 +396,13 @@ class App(customtkinter.CTk):
         else:
             self.console_print('Check if bluetooth is enabled')
             self.console_print('Check if car is connected to your device')
-            self.car_database['connection_status'] = "not connected"
+            self.car_database['connection_status'] = "not connected" """
+        self.trans()
 
     # periodic function for sending control data to the car
     def trans(self):
-        self.bluetooth.transmission(self.car_database['current_speed_y'])
-        #print(self.car_database['current_speed_x'], self.car_database['current_speed_y'])
+        #self.bluetooth.transmission(self.car_database['current_speed_y'])
+        print(self.car_database['current_speed_x'], self.car_database['current_speed_y'])
         self.alarm = self.after(10, self.trans)
 
     def scaling_image(self):

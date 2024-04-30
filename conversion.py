@@ -5,8 +5,9 @@ class ConversionSys:
         super().__init__()
 
         self.velocity = {
-            "x_speed": 180,
-            "y_speed": 0
+            "x_speed": 90,
+            "y_speed": 90,
+            "last_div_5": 0
         }
 
         self.axis_value = {"end_value": 98}
@@ -17,6 +18,7 @@ class ConversionSys:
         if scale == 1.5:
             self.axis_value["end_value"] = 158
 
+    # function to convert values from tkinter canvas to carthesian coordinate system with start point at (0,0)
     def axis_conversion(self, coords, scale):
 
         self.scale_check(scale)
@@ -28,9 +30,6 @@ class ConversionSys:
             return self.speed_data_conversion_100()
         if scale == 1.5:
             return self.speed_data_conversion_150()
-
-
-
 
     # function to convert units from axes (joystick) into real car control values
     def speed_data_conversion_100(self):
@@ -51,22 +50,30 @@ class ConversionSys:
             self.velocity["y_speed"] = 170
         """
         1 część zrobiona aby przekształcić dane zebrane z osi Y
-        na wartości odpowiadające sterowaniu silnika (DC 3V/6V)
-        ruch przód-tył, aktualny zakres: 92 - 208
+        na wartości odpowiadające sterowaniu mechanizmu micro servo
+        ruch przód-tył, aktualny zakres: 10-170
         """
 
-        if 15 < self.velocity["x_speed"] < 81:
-            self.velocity["x_speed"] = self.velocity["x_speed"] + 165
-        elif -15 > self.velocity["x_speed"] > -81:
-            self.velocity["x_speed"] = self.velocity["x_speed"] + 195
+        if 15 <= self.velocity["x_speed"] <= 81:
+            if self.velocity["x_speed"] % 5 == 0:
+                self.velocity["last_div_5"] = 80 - self.velocity["x_speed"]
+                self.velocity["x_speed"] = self.velocity["last_div_5"]
+            else:
+                self.velocity["x_speed"] = self.velocity["last_div_5"]
+        elif -15 >= self.velocity["x_speed"] >= -81:
+            if self.velocity["x_speed"] % 5 == 0:
+                self.velocity["last_div_5"] = 60 - self.velocity["x_speed"]
+                self.velocity["x_speed"] = self.velocity["last_div_5"]
+            else:
+                self.velocity["x_speed"] = self.velocity["last_div_5"]
 
         elif 15 > self.velocity["x_speed"] > -15:
-            self.velocity["x_speed"] = 180
+            self.velocity["x_speed"] = 70
 
         elif self.velocity["x_speed"] > 81:
-            self.velocity["x_speed"] = 240
+            self.velocity["x_speed"] = 0
         elif self.velocity["x_speed"] < -81:
-            self.velocity["x_speed"] = 120
+            self.velocity["x_speed"] = 140
         """
         2 część zrobiona aby przekształcić dane zebrane z osi X
         na wartości odpowiadające sterowaniu silnika (krokowego)
