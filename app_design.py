@@ -118,14 +118,36 @@ class App(customtkinter.CTk):
         # looking for a COM port associated with HC-05 bluetooth module for Arduino
         self.bluetooth_module_port = Port()
 
-        self.connect_button = customtkinter.CTkButton(self.home_frame, command=self.connect_button_event,
-                                                      text="Connect", fg_color="green")
-        self.connect_button.grid(row=1, column=0, padx=20, pady=10)
-
         """tutaj należy zrobić layout dla ramki home"""
-        self.optionmenu_1 = customtkinter.CTkOptionMenu(self.home_frame, dynamic_resizing=False,
-                                                        values=self.bluetooth_module_port.scanner(), command=self.com_menu_event)
-        self.optionmenu_1.grid(row=0, column=0, padx=20, pady=(20, 10))
+
+        self.welcome_text = customtkinter.CTkTextbox(self.home_frame, width=300, height=200, corner_radius=0)
+        self.welcome_text.grid(row=0, column=0, rowspan=4, padx=(20, 0), pady=(60, 20))
+        self.welcome_text.insert(index="0.0", text="\n WELCOME\n\n" +
+                                 " This is program made for RC car control\n\n" +
+                                 " 1. Connect your device to the car\n\n" +
+                                 " 2. Start driving your car\n\n" +
+                                 " You can use keyboard or joystick steering\n\n")
+        self.welcome_text.configure(state="disabled")
+
+        self.connection_frame = customtkinter.CTkFrame(self.home_frame, height=200, width=200)
+        self.connection_frame.grid(row=0, column=1, padx=(20, 20), pady=(80, 0))
+        self.port = self.bluetooth_module_port.scanner()
+
+        if len(self.port) > 0:
+            self.port = "MICROCONTROLLER FOUND AT: "+self.bluetooth_module_port.scanner()[0]
+        else:
+            self.port = "MICROCONTROLLER NOT FOUND"
+
+        self.com_port_label = customtkinter.CTkLabel(self.connection_frame, text=self.port)
+        self.com_port_label.grid(row=0, column=0, padx=10, pady=10)
+
+        self.connect_button = customtkinter.CTkButton(self.home_frame, command=self.connect_button_event,
+                                                      text="Connect", fg_color="green", hover_color='grey')
+        self.connect_button.grid(row=1, column=1, padx=20, pady=(10, 0))
+        # zrobić tak żeby nie dało się kliknąć znowu przycisku connect i dissconnect
+        self.disconnect_button = customtkinter.CTkButton(self.home_frame, command=self.disconnect_button_event,
+                                                         text="Disconnect", fg_color="red", hover_color='grey')
+        self.disconnect_button.grid(row=2, column=1, padx=20, pady=10)
 
         # create textbox/consol
         self.consol_frame = customtkinter.CTkFrame(self, fg_color='#1d1e1e', corner_radius=0)
@@ -352,7 +374,7 @@ class App(customtkinter.CTk):
 
     # function for checking COM port and enabling bluetooth communication
     def printer(self):
-        port = self.bluetooth_module_port.scanner()[0]
+        port = self.bluetooth_module_port.scanner()
         self.console_print("Connecting started...")
         # checking if COM port is found
         if len(port) > 0:
@@ -400,4 +422,7 @@ class App(customtkinter.CTk):
         new_thread = Thread(target=self.printer, args=(), daemon=True)
         new_thread.start()
         #self.printer()
+
+    def disconnect_button_event(self):
+        pass
 
