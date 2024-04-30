@@ -1,3 +1,4 @@
+
 import tkinter
 import customtkinter
 from tkinter import *
@@ -208,12 +209,17 @@ class App(customtkinter.CTk):
         self.joystick_board_label.tag_bind(self.joystick_control_circle, "<B1-Motion>", self.drag_motion)
         self.joystick_board_label.tag_bind(self.joystick_control_circle, "<ButtonRelease-1>", self.dropped)
 
+        # creating variables to hold data used to move joystick
+        self.coordinates = self.joystick_board_label.coords(self.joystick_control_circle)
+        self.x_pos = None
+        self.y_pos = None
+
         # select default frame
         self.select_frame_by_name("home")
 
-        """
-        ***** The end of __init__ section *****
-        """
+    """
+    ***** The end of __init__ section *****
+    """
 
     def select_frame_by_name(self, name):
         # set button color for selected button
@@ -282,7 +288,7 @@ class App(customtkinter.CTk):
     """
     def drag_start(self, event):
         self.coordinates = self.joystick_board_label.coords(self.joystick_control_circle)
-        self.x_pos = event.x  # tutej gdzieś można dopisać lnijke ktora usunałęm, może jostick nie bedzie uciekał
+        self.x_pos = event.x
         self.y_pos = event.y
 
     # handling drag motion
@@ -312,9 +318,11 @@ class App(customtkinter.CTk):
         # obsługa przesuwania obiektu w naszym układzie wspl
         self.joystick_board_label.moveto(self.joystick_control_circle, x, y)
         self.coordinates = self.joystick_board_label.coords(self.joystick_control_circle)
+        # conv from float to int
         self.coordinates[0] = int(self.coordinates[0])
         self.coordinates[1] = int(self.coordinates[1])
 
+        # conv from axis values to control values
         new_speed = self.conversion_sys.axis_conversion(self.coordinates, self.scaleFactor)
 
         self.car_database['current_speed_x'] = new_speed["x_speed"]
@@ -350,14 +358,14 @@ class App(customtkinter.CTk):
             elif event.char == "d":
                 self.car_database['current_speed_x'] = 180
 
-    """periodic function for sending/printing data which control the car"""
+    # function for checking COM port and enabling bluetooth communication
     def printer(self):
-        self.trans()
-        """port = self.available_ports.scanner()[0]
+        #self.trans()
+        port = self.bluetooth_module_port.scanner()[0]
         if len(port) > 0:
-            self.bluetooth.define_port(self.available_ports.scanner()[0])
             try:
                 self.bluetooth.start_connection()
+                #print("connected")
             except AttributeError as e:
                 print("connection failed")
                 print("check connection")
@@ -369,9 +377,9 @@ class App(customtkinter.CTk):
                 self.bluetooth.board_setup()
                 self.trans()
         else:
-            print('check connection')"""
+            print('check connection')
 
-
+    # periodic function for sending control data to the car
     def trans(self):
         #self.bluetooth.transmission(self.car_database['current_speed_y'])
         print(self.car_database['current_speed_x'], self.car_database['current_speed_y'])
