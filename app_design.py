@@ -25,9 +25,6 @@ class App(customtkinter.CTk):
         # creating object to convert values from joystick axis to values to control micro servo
         self.conversion_sys = ConversionSys()
 
-        # creating object to handle bluetooth communication with the car
-        self.bluetooth = Blut()
-
         # binding key press and release
         self.bind('<Key>', self.key_press)
         self.bind("<KeyRelease>", self.key_release)
@@ -70,6 +67,7 @@ class App(customtkinter.CTk):
             "keyboard_speed_backward": 110,
             "current_speed_x": 180,
             "current_speed_y": 90,
+            "connection_status": "not connected"
         }
 
         # load images that will be used later
@@ -117,6 +115,10 @@ class App(customtkinter.CTk):
 
         # looking for a COM port associated with HC-05 bluetooth module for Arduino
         self.bluetooth_module_port = Port()
+
+        # creating object to handle bluetooth communication with the car and passing COM port
+        self.bluetooth = Blut()
+        self.bluetooth.define_port(self.bluetooth_module_port.scanner()[0])
 
         """tutaj należy zrobić layout dla ramki home"""
 
@@ -382,20 +384,24 @@ class App(customtkinter.CTk):
                 self.bluetooth.start_connection()
             except AttributeError as e:
                 self.console_print("Check connection and try again")
+                self.car_database['connection_status'] = "not connected"
             except:
                 self.console_print("Check connection and try again")
+                self.car_database['connection_status'] = "not connected"
             else:
+                self.car_database['connection_status'] = "connected"
                 self.console_print("Connected")
                 self.bluetooth.board_setup()
                 self.trans()
         else:
             self.console_print('Check if bluetooth is enabled')
             self.console_print('Check if car is connected to your device')
+            self.car_database['connection_status'] = "not connected"
 
     # periodic function for sending control data to the car
     def trans(self):
-        #self.bluetooth.transmission(self.car_database['current_speed_y'])
-        print(self.car_database['current_speed_x'], self.car_database['current_speed_y'])
+        self.bluetooth.transmission(self.car_database['current_speed_y'])
+        #print(self.car_database['current_speed_x'], self.car_database['current_speed_y'])
         self.alarm = self.after(10, self.trans)
 
     def scaling_image(self):
@@ -419,9 +425,12 @@ class App(customtkinter.CTk):
         print(selection)
 
     def connect_button_event(self):
-        new_thread = Thread(target=self.printer, args=(), daemon=True)
-        new_thread.start()
-        #self.printer()
+        if self.car_database['connection_status'] == "not connected":
+            new_thread = Thread(target=self.printer, args=(), daemon=True)
+            new_thread.start()
+            self.car_database['connection_status'] = "connected"
+        else:
+            self.console_print("Car is alread connected")
 
     def disconnect_button_event(self):
         pass
