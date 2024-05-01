@@ -363,17 +363,19 @@ class App(customtkinter.CTk):
                 self.car_database['current_speed_y1'] = self.car_database['keyboard_speed_backward']
                 self.car_database['current_speed_y2'] = self.car_database['keyboard_speed_forward']
             elif event.char == "a":
-                self.car_database['current_speed_x'] = 115
+                self.car_database['current_speed_x'] = 125
             elif event.char == "d":
-                self.car_database['current_speed_x'] = 35
+                self.car_database['current_speed_x'] = 25
 
     def key_release(self, event):
 
         if self.which_window[0] == 2:
             if event.char == "w":
                 self.car_database['current_speed_y1'] = 90
+                self.car_database['current_speed_y2'] = 90
             elif event.char == "s":
                 self.car_database['current_speed_y1'] = 90
+                self.car_database['current_speed_y2'] = 90
             elif event.char == "a":
                 self.car_database['current_speed_x'] = 75
             elif event.char == "d":
@@ -381,7 +383,7 @@ class App(customtkinter.CTk):
 
     # function for checking COM port and enabling bluetooth communication
     def printer(self):
-        """port = self.bluetooth_module_port.scanner()
+        port = self.bluetooth_module_port.scanner()
         self.console_print("Connecting started...")
         # checking if COM port is found
         if len(port) > 0:
@@ -401,15 +403,15 @@ class App(customtkinter.CTk):
         else:
             self.console_print('Check if bluetooth is enabled')
             self.console_print('Check if car is connected to your device')
-            self.car_database['connection_status'] = "not connected" """
-        self.trans()
+            self.car_database['connection_status'] = "not connected"
+        #self.trans()
 
     # periodic function for sending control data to the car
     def trans(self):
         x = self.car_database['current_speed_x']
         y1 = self.car_database['current_speed_y1']
         y2 = self.car_database['current_speed_y2']
-        #self.bluetooth.transmission(x, y1, y2)
+        self.bluetooth.transmission(x, y1, y2)
         print(x, y1, y2)
         self.alarm = self.after(10, self.trans)
 

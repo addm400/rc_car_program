@@ -13,8 +13,8 @@ class Blut:
         }
 
         self.pin3 = 3
-        self.pin5 = 3
-        self.pin6 = 3
+        self.pin5 = 5
+        self.pin6 = 6
         self.board = None
         self.input_data = None  # dorzucić otrzymywanie informacji zwrotnej
 
