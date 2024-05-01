@@ -13,6 +13,8 @@ class Blut:
         }
 
         self.pin3 = 3
+        self.pin5 = 3
+        self.pin6 = 3
         self.board = None
         self.input_data = None  # dorzucić otrzymywanie informacji zwrotnej
 
@@ -23,14 +25,17 @@ class Blut:
         self.board = Arduino(self.data['port'])
 
     def board_setup(self):
-        pass
         self.board.digital[self.pin3].mode = SERVO
+        self.board.digital[self.pin5].mode = SERVO
+        self.board.digital[self.pin6].mode = SERVO
 
     def check_connection(self):
         return self.data['connected']
 
-    def transmission(self, value):
-        self.board.digital[self.pin3].write(value)
+    def transmission(self, x_value, y1_value, y2_value):
+        self.board.digital[self.pin3].write(x_value)
+        self.board.digital[self.pin5].write(y1_value)
+        self.board.digital[self.pin6].write(y2_value)
 
 
 

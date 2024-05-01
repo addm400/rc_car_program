@@ -406,8 +406,11 @@ class App(customtkinter.CTk):
 
     # periodic function for sending control data to the car
     def trans(self):
-        #self.bluetooth.transmission(self.car_database['current_speed_y1'])
-        print(self.car_database['current_speed_x'], self.car_database['current_speed_y1'], self.car_database['current_speed_y2'])
+        x = self.car_database['current_speed_x']
+        y1 = self.car_database['current_speed_y1']
+        y2 = self.car_database['current_speed_y2']
+        #self.bluetooth.transmission(x, y1, y2)
+        print(x, y1, y2)
         self.alarm = self.after(10, self.trans)
 
     def scaling_image(self):
