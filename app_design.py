@@ -413,7 +413,7 @@ class App(customtkinter.CTk):
         y2 = self.car_database['current_speed_y2']
         self.bluetooth.transmission(x, y1, y2)
         print(x, y1, y2)
-        self.alarm = self.after(10, self.trans)
+        self.alarm = self.after(100, self.trans)
 
     def scaling_image(self):
         """function made to scale images and axis values depending on scale factor of Windows for ex. 100%, 150%"""
