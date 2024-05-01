@@ -86,20 +86,22 @@ class ConversionSys:
 
     def speed_data_conversion_150(self):
 
-        if 25 < self.velocity["y1_speed"] < 158:
-            self.velocity["y1_speed"] = self.velocity["y1_speed"] + 56
-        elif -25 > self.velocity["y1_speed"] > -158:
-            self.velocity["y1_speed"] = self.velocity["y1_speed"] - 56
+        if 28 <= self.velocity["y1_speed"] < 158:
+            self.velocity["y1_speed"] = -int(self.velocity["y1_speed"]/2) + 90
+        elif -28 >= self.velocity["y1_speed"] > -158:
+            self.velocity["y1_speed"] = -int(self.velocity["y1_speed"]/2) + 90
 
-        elif 25 > self.velocity["y1_speed"] >= 0:
-            self.velocity["y1_speed"] = 0
-        elif -25 < self.velocity["y1_speed"] <= 0:
-            self.velocity["y1_speed"] = 0
+        elif 28 > self.velocity["y1_speed"] >= 0:
+            self.velocity["y1_speed"] = 90
+        elif -28 < self.velocity["y1_speed"] <= 0:
+            self.velocity["y1_speed"] = 90
 
         elif self.velocity["y1_speed"] >= 158:
-            self.velocity["y1_speed"] = 214
+            self.velocity["y1_speed"] = 10
         elif self.velocity["y1_speed"] <= -158:
-            self.velocity["y1_speed"] = -214
+            self.velocity["y1_speed"] = 170
+
+        self.velocity["y2_speed"] = 180 - self.velocity["y1_speed"]
         """
         1 część zrobiona aby przekształcić dane zebrane z osi Y
         na wartości odpowiadające sterowaniu silnika (DC 3V/6V)

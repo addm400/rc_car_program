@@ -383,7 +383,7 @@ class App(customtkinter.CTk):
 
     # function for checking COM port and enabling bluetooth communication
     def printer(self):
-        port = self.bluetooth_module_port.scanner()
+        """port = self.bluetooth_module_port.scanner()
         self.console_print("Connecting started...")
         # checking if COM port is found
         if len(port) > 0:
@@ -403,15 +403,15 @@ class App(customtkinter.CTk):
         else:
             self.console_print('Check if bluetooth is enabled')
             self.console_print('Check if car is connected to your device')
-            self.car_database['connection_status'] = "not connected"
-        #self.trans()
+            self.car_database['connection_status'] = "not connected" """
+        self.trans()
 
     # periodic function for sending control data to the car
     def trans(self):
         x = self.car_database['current_speed_x']
         y1 = self.car_database['current_speed_y1']
         y2 = self.car_database['current_speed_y2']
-        self.bluetooth.transmission(x, y1, y2)
+        #self.bluetooth.transmission(x, y1, y2)
         print(x, y1, y2)
         self.alarm = self.after(10, self.trans)
 
