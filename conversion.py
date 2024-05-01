@@ -108,18 +108,18 @@ class ConversionSys:
         ruch przód-tył, aktualny zakres: 92 - 208
         """
 
-        if 25 < self.velocity["x_speed"] < 145:
-            self.velocity["x_speed"] = int(self.velocity["x_speed"]/2) + 167
-        elif -25 > self.velocity["x_speed"] > -145:
-            self.velocity["x_speed"] = int(self.velocity["x_speed"]/2) + 193
+        if 28 < self.velocity["x_speed"] < 158:
+            self.velocity["x_speed"] = -int(self.velocity["x_speed"]/2) + 85
+        elif -28 > self.velocity["x_speed"] > -158:
+            self.velocity["x_speed"] = -int(self.velocity["x_speed"]/2) + 65
 
-        elif 25 >= self.velocity["x_speed"] >= -25:
-            self.velocity["x_speed"] = 180
+        elif 28 >= self.velocity["x_speed"] >= -28:
+            self.velocity["x_speed"] = 75
 
-        elif self.velocity["x_speed"] > 145:
-            self.velocity["x_speed"] = 240
-        elif self.velocity["x_speed"] < -145:
-            self.velocity["x_speed"] = 120
+        elif self.velocity["x_speed"] >= 158:
+            self.velocity["x_speed"] = 5
+        elif self.velocity["x_speed"] <= -158:
+            self.velocity["x_speed"] = 145
         """
         2 część zrobiona aby przekształcić dane zebrane z osi X
         na wartości odpowiadające sterowaniu silnika (krokowego)
