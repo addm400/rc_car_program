@@ -5,7 +5,7 @@ class ConversionSys:
         super().__init__()
 
         self.velocity = {
-            "x_speed": 90,
+            "x_speed": 75,
             "y_speed": 90,
             "last_div_5": 0
         }
@@ -56,24 +56,24 @@ class ConversionSys:
 
         if 15 <= self.velocity["x_speed"] <= 81:
             if self.velocity["x_speed"] % 5 == 0:
-                self.velocity["last_div_5"] = 80 - self.velocity["x_speed"]
+                self.velocity["last_div_5"] = 85 - self.velocity["x_speed"]
                 self.velocity["x_speed"] = self.velocity["last_div_5"]
             else:
                 self.velocity["x_speed"] = self.velocity["last_div_5"]
         elif -15 >= self.velocity["x_speed"] >= -81:
             if self.velocity["x_speed"] % 5 == 0:
-                self.velocity["last_div_5"] = 60 - self.velocity["x_speed"]
+                self.velocity["last_div_5"] = 65 - self.velocity["x_speed"]
                 self.velocity["x_speed"] = self.velocity["last_div_5"]
             else:
                 self.velocity["x_speed"] = self.velocity["last_div_5"]
 
         elif 15 > self.velocity["x_speed"] > -15:
-            self.velocity["x_speed"] = 70
+            self.velocity["x_speed"] = 75
 
         elif self.velocity["x_speed"] > 81:
-            self.velocity["x_speed"] = 0
+            self.velocity["x_speed"] = 5
         elif self.velocity["x_speed"] < -81:
-            self.velocity["x_speed"] = 140
+            self.velocity["x_speed"] = 145
         """
         2 część zrobiona aby przekształcić dane zebrane z osi X
         na wartości odpowiadające sterowaniu silnika (krokowego)

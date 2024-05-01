@@ -65,7 +65,7 @@ class App(customtkinter.CTk):
         self.car_database = {
             "keyboard_speed_forward": 70,
             "keyboard_speed_backward": 110,
-            "current_speed_x": 70,
+            "current_speed_x": 75,
             "current_speed_y": 90,
             "connection_status": "not connected"
         }
@@ -348,7 +348,7 @@ class App(customtkinter.CTk):
         self.joystick_board_label.moveto(self.joystick_control_circle,
                                          self.joystick_database["x_home"], self.joystick_database["y_home"])
 
-        self.car_database['current_speed_x'] = 70
+        self.car_database['current_speed_x'] = 75
         self.car_database['current_speed_y'] = 90
 
     def key_press(self, event):
@@ -358,9 +358,9 @@ class App(customtkinter.CTk):
             elif event.char == "s":
                 self.car_database['current_speed_y'] = self.car_database['keyboard_speed_backward']
             elif event.char == "a":
-                self.car_database['current_speed_x'] = 140
+                self.car_database['current_speed_x'] = 115
             elif event.char == "d":
-                self.car_database['current_speed_x'] = 220
+                self.car_database['current_speed_x'] = 35
 
     def key_release(self, event):
 
@@ -370,9 +370,9 @@ class App(customtkinter.CTk):
             elif event.char == "s":
                 self.car_database['current_speed_y'] = 90
             elif event.char == "a":
-                self.car_database['current_speed_x'] = 70
+                self.car_database['current_speed_x'] = 75
             elif event.char == "d":
-                self.car_database['current_speed_x'] = 70
+                self.car_database['current_speed_x'] = 75
 
     # function for checking COM port and enabling bluetooth communication
     def printer(self):
