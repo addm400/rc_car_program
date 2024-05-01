@@ -6,7 +6,8 @@ class ConversionSys:
 
         self.velocity = {
             "x_speed": 75,
-            "y_speed": 90,
+            "y1_speed": 90,
+            "y2_speed": 90,
             "last_div_5": 0
         }
 
@@ -24,7 +25,7 @@ class ConversionSys:
         self.scale_check(scale)
 
         self.velocity["x_speed"] = coords[0] - self.axis_value["end_value"]
-        self.velocity["y_speed"] = (coords[1] - self.axis_value["end_value"]) * (-1)
+        self.velocity["y1_speed"] = (coords[1] - self.axis_value["end_value"]) * (-1)
 
         if scale == 1:
             return self.speed_data_conversion_100()
@@ -34,20 +35,22 @@ class ConversionSys:
     # function to convert units from axes (joystick) into real car control values
     def speed_data_conversion_100(self):
 
-        if 15 < self.velocity["y_speed"] < 90:
-            self.velocity["y_speed"] = 98 - self.velocity["y_speed"]
-        elif -15 > self.velocity["y_speed"] > -90:
-            self.velocity["y_speed"] = -self.velocity["y_speed"] + 90
+        if 15 < self.velocity["y1_speed"] < 90:
+            self.velocity["y1_speed"] = 98 - self.velocity["y1_speed"]
+        elif -15 > self.velocity["y1_speed"] > -90:
+            self.velocity["y1_speed"] = -self.velocity["y1_speed"] + 90
 
-        elif 15 >= self.velocity["y_speed"] >= 0:
-            self.velocity["y_speed"] = 90
-        elif -15 <= self.velocity["y_speed"] <= 0:
-            self.velocity["y_speed"] = 90
+        elif 15 >= self.velocity["y1_speed"] >= 0:
+            self.velocity["y1_speed"] = 90
+        elif -15 <= self.velocity["y1_speed"] <= 0:
+            self.velocity["y1_speed"] = 90
 
-        elif self.velocity["y_speed"] >= 90:
-            self.velocity["y_speed"] = 10
-        elif self.velocity["y_speed"] <= -90:
-            self.velocity["y_speed"] = 170
+        elif self.velocity["y1_speed"] >= 90:
+            self.velocity["y1_speed"] = 10
+        elif self.velocity["y1_speed"] <= -90:
+            self.velocity["y1_speed"] = 170
+
+        self.velocity["y2_speed"] = 180 - self.velocity["y1_speed"]
         """
         1 część zrobiona aby przekształcić dane zebrane z osi Y
         na wartości odpowiadające sterowaniu mechanizmu micro servo
@@ -83,20 +86,20 @@ class ConversionSys:
 
     def speed_data_conversion_150(self):
 
-        if 25 < self.velocity["y_speed"] < 158:
-            self.velocity["y_speed"] = self.velocity["y_speed"] + 56
-        elif -25 > self.velocity["y_speed"] > -158:
-            self.velocity["y_speed"] = self.velocity["y_speed"] - 56
+        if 25 < self.velocity["y1_speed"] < 158:
+            self.velocity["y1_speed"] = self.velocity["y1_speed"] + 56
+        elif -25 > self.velocity["y1_speed"] > -158:
+            self.velocity["y1_speed"] = self.velocity["y1_speed"] - 56
 
-        elif 25 > self.velocity["y_speed"] >= 0:
-            self.velocity["y_speed"] = 0
-        elif -25 < self.velocity["y_speed"] <= 0:
-            self.velocity["y_speed"] = 0
+        elif 25 > self.velocity["y1_speed"] >= 0:
+            self.velocity["y1_speed"] = 0
+        elif -25 < self.velocity["y1_speed"] <= 0:
+            self.velocity["y1_speed"] = 0
 
-        elif self.velocity["y_speed"] >= 158:
-            self.velocity["y_speed"] = 214
-        elif self.velocity["y_speed"] <= -158:
-            self.velocity["y_speed"] = -214
+        elif self.velocity["y1_speed"] >= 158:
+            self.velocity["y1_speed"] = 214
+        elif self.velocity["y1_speed"] <= -158:
+            self.velocity["y1_speed"] = -214
         """
         1 część zrobiona aby przekształcić dane zebrane z osi Y
         na wartości odpowiadające sterowaniu silnika (DC 3V/6V)

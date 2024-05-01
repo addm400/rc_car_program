@@ -66,7 +66,8 @@ class App(customtkinter.CTk):
             "keyboard_speed_forward": 70,
             "keyboard_speed_backward": 110,
             "current_speed_x": 75,
-            "current_speed_y": 90,
+            "current_speed_y1": 90,
+            "current_speed_y2": 90,
             "connection_status": "not connected"
         }
 
@@ -342,21 +343,25 @@ class App(customtkinter.CTk):
         new_speed = self.conversion_sys.axis_conversion(self.coordinates, self.scaleFactor)
 
         self.car_database['current_speed_x'] = new_speed["x_speed"]
-        self.car_database['current_speed_y'] = new_speed["y_speed"]
+        self.car_database['current_speed_y1'] = new_speed["y1_speed"]
+        self.car_database['current_speed_y2'] = new_speed["y2_speed"]
 
     def dropped(self, event):
         self.joystick_board_label.moveto(self.joystick_control_circle,
                                          self.joystick_database["x_home"], self.joystick_database["y_home"])
 
         self.car_database['current_speed_x'] = 75
-        self.car_database['current_speed_y'] = 90
+        self.car_database['current_speed_y1'] = 90
+        self.car_database['current_speed_y2'] = 90
 
     def key_press(self, event):
         if self.which_window[0] == 2:
             if event.char == "w":
-                self.car_database['current_speed_y'] = self.car_database['keyboard_speed_forward']
+                self.car_database['current_speed_y1'] = self.car_database['keyboard_speed_forward']
+                self.car_database['current_speed_y2'] = self.car_database['keyboard_speed_backward']
             elif event.char == "s":
-                self.car_database['current_speed_y'] = self.car_database['keyboard_speed_backward']
+                self.car_database['current_speed_y1'] = self.car_database['keyboard_speed_backward']
+                self.car_database['current_speed_y2'] = self.car_database['keyboard_speed_forward']
             elif event.char == "a":
                 self.car_database['current_speed_x'] = 115
             elif event.char == "d":
@@ -366,9 +371,9 @@ class App(customtkinter.CTk):
 
         if self.which_window[0] == 2:
             if event.char == "w":
-                self.car_database['current_speed_y'] = 90
+                self.car_database['current_speed_y1'] = 90
             elif event.char == "s":
-                self.car_database['current_speed_y'] = 90
+                self.car_database['current_speed_y1'] = 90
             elif event.char == "a":
                 self.car_database['current_speed_x'] = 75
             elif event.char == "d":
@@ -401,8 +406,8 @@ class App(customtkinter.CTk):
 
     # periodic function for sending control data to the car
     def trans(self):
-        #self.bluetooth.transmission(self.car_database['current_speed_y'])
-        print(self.car_database['current_speed_x'], self.car_database['current_speed_y'])
+        #self.bluetooth.transmission(self.car_database['current_speed_y1'])
+        print(self.car_database['current_speed_x'], self.car_database['current_speed_y1'], self.car_database['current_speed_y2'])
         self.alarm = self.after(10, self.trans)
 
     def scaling_image(self):
