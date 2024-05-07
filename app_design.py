@@ -73,16 +73,18 @@ class App(customtkinter.CTk):
 
         # load images that will be used later
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "test_images")
-        self.logo_icon = customtkinter.CTkImage(Image.open(os.path.join(image_path, "icon.png")), size=(45, 30))
+        self.logo_icon = customtkinter.CTkImage(Image.open(os.path.join(image_path, "icon_pic.png")), size=(45, 45))
         self.home_icon = customtkinter.CTkImage(Image.open(os.path.join(image_path, "home_pic.png")), size=(20, 20))
         self.keyboard_icon = customtkinter.CTkImage(Image.open(os.path.join(image_path, "keyboard_pic.png")), size=(20, 20))
         self.joystick_icon = customtkinter.CTkImage(Image.open(os.path.join(image_path, "joystick_pic.png")), size=(20, 20))
         self.arrows_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "strzalki.png")), size=(239, 220))
 
-        self.joystick_board_image = Image.open('test_images//arrows.png')
+        self.iconbitmap('test_images//icon_icon.ico')
+
+        self.joystick_board_image = Image.open('test_images//board_pic.png')
         self.joystick_board_image = self.joystick_board_image.resize((self.image_database["board_size_100"], self.image_database["board_size_100"]))
 
-        self.joystick_circle = Image.open('test_images//kolko.png')
+        self.joystick_circle = Image.open('test_images//circle_pic.png')
         self.joystick_circle = self.joystick_circle.resize((self.image_database["joystick_size_100"], self.image_database["joystick_size_100"]))
 
         # create navigation frame on the left hand side
@@ -90,8 +92,8 @@ class App(customtkinter.CTk):
         self.navigation_frame.grid(row=0, column=0, rowspan=3, sticky="nsew")
         self.navigation_frame.grid_rowconfigure(4, weight=1)
 
-        self.navigation_frame_label = customtkinter.CTkLabel(self.navigation_frame, text="  Control Panel", image=self.logo_icon,
-                                                             compound="left", font=customtkinter.CTkFont(size=15, weight="bold"))
+        self.navigation_frame_label = customtkinter.CTkLabel(self.navigation_frame, text="Control Panel  ", image=self.logo_icon,
+                                                             compound="right", font=customtkinter.CTkFont(size=15, weight="bold"))
         self.navigation_frame_label.grid(row=0, column=0, padx=20, pady=20)
 
         # create buttons to switch between pages
