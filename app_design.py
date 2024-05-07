@@ -43,14 +43,17 @@ class App(customtkinter.CTk):
         # values used to adjust size of images in canvas
         self.image_database = {
             "board_size_100": 275,
+            "board_size_125": 340,
             "board_size_150": 436,
             "joystick_size_100": 80,
+            "joystick_size_125": 100,
             "joystick_size_150": 120,
         }
 
         # values used to adjust size of canvas
         self.canvas_database = {
             "canvas_width_100": 275, "canvas_height_100": 275,
+            "canvas_width_125": 340, "canvas_height_125": 340,
             "canvas_width_150": 436, "canvas_height_150": 436,
         }
 
@@ -419,10 +422,26 @@ class App(customtkinter.CTk):
 
     def scaling_image(self):
         """function made to scale images and axis values depending on scale factor of Windows for ex. 100%, 150%"""
+        if self.scaleFactor == 1.25:
+            self.joystick_board_label.configure(width=self.canvas_database["canvas_width_125"],
+                                                height=self.canvas_database["canvas_height_125"])
+            self.joystick_board_label.grid(row=0, column=0, pady=(20, 0), padx=(0, 360))
+            self.keyboard_image_label.grid(row=0, column=0, padx=(20, 0), pady=(0, 0))
+
+            self.joystick_board_image = self.joystick_board_image.resize((self.image_database["board_size_125"],
+                                                                          self.image_database["board_size_125"]))
+
+            self.joystick_circle = self.joystick_circle.resize((self.image_database["joystick_size_125"],
+                                                                self.image_database["joystick_size_125"]))
+
+            self.joystick_database["x_home"] = 120
+            self.joystick_database["y_home"] = 120
+            self.joystick_database['end_value'] = 316
         if self.scaleFactor == 1.5:
             self.joystick_board_label.configure(width=self.canvas_database["canvas_width_150"],
                                                 height=self.canvas_database["canvas_height_150"])
             self.joystick_board_label.grid(row=0, column=0, pady=(20, 0), padx=(0, 410))
+            self.keyboard_image_label.grid(row=0, column=0, padx=(20, 0), pady=(0, 0))
 
             self.joystick_board_image = self.joystick_board_image.resize((self.image_database["board_size_150"],
                                                                           self.image_database["board_size_150"]))
@@ -433,6 +452,7 @@ class App(customtkinter.CTk):
             self.joystick_database["x_home"] = 157
             self.joystick_database["y_home"] = 156
             self.joystick_database['end_value'] = 316
+
 
     def com_menu_event(self, selection):
         print(selection)

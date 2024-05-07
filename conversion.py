@@ -29,6 +29,8 @@ class ConversionSys:
 
         if scale == 1:
             return self.speed_data_conversion_100()
+        if scale == 1.25:
+            return self.velocity
         if scale == 1.5:
             return self.speed_data_conversion_150()
 
