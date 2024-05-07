@@ -1,9 +1,14 @@
 from pyfirmata2 import Arduino, SERVO
 
+"""
+class for handling bluetooth communication with Arduino
+"""
+
 
 class Blut:
     def __init__(self):
 
+        # dict to hold bluetooth info
         self.data = {
             "x": 180,
             "y": 91,
@@ -21,19 +26,19 @@ class Blut:
 
     def start_connection(self):
         self.board = Arduino(self.data['port'])
+        # method for starting connection with arduino board
 
     def board_setup(self):
         self.board.digital[self.pin3].mode = SERVO
         self.board.digital[self.pin5].mode = SERVO
         self.board.digital[self.pin6].mode = SERVO
-
-    def check_connection(self):
-        return self.data['connected']
+        # setting pins in arduino on servo control mode
 
     def transmission(self, x_value, y1_value, y2_value):
         self.board.digital[self.pin3].write(x_value)
         self.board.digital[self.pin5].write(y1_value)
         self.board.digital[self.pin6].write(y2_value)
+        # sending control values to specified pins to the board
 
 
 

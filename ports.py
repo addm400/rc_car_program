@@ -1,5 +1,10 @@
 import serial.tools.list_ports
 
+"""
+class for getting COM connections from PC 
+and finding HC-05
+"""
+
 
 class Port:
     def __init__(self):

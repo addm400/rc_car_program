@@ -122,9 +122,8 @@ class App(customtkinter.CTk):
         # looking for a COM port associated with HC-05 bluetooth module for Arduino
         self.bluetooth_module_port = Port()
 
-        # creating object to handle bluetooth communication with the car and passing COM port
+        # creating object to handle bluetooth communication with the car
         self.bluetooth = Blut()
-        self.bluetooth.define_port(self.bluetooth_module_port.scanner()[0])
 
         """tutaj należy zrobić layout dla ramki home"""
 
@@ -143,6 +142,7 @@ class App(customtkinter.CTk):
 
         if len(self.port) > 0:
             self.port = "MICROCONTROLLER FOUND AT: "+self.bluetooth_module_port.scanner()[0]
+            self.bluetooth.define_port(self.bluetooth_module_port.scanner()[0])  # passing COM port to the bluetooth object
         else:
             self.port = "MICROCONTROLLER NOT FOUND"
 
