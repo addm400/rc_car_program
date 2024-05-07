@@ -77,7 +77,7 @@ class App(customtkinter.CTk):
         self.home_icon = customtkinter.CTkImage(Image.open(os.path.join(image_path, "home_pic.png")), size=(20, 20))
         self.keyboard_icon = customtkinter.CTkImage(Image.open(os.path.join(image_path, "keyboard_pic.png")), size=(20, 20))
         self.joystick_icon = customtkinter.CTkImage(Image.open(os.path.join(image_path, "joystick_pic.png")), size=(20, 20))
-        self.arrows_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "strzalki.png")), size=(239, 220))
+        self.arrows_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "wasd_pic.png")), size=(270, 220))
 
         self.iconbitmap('test_images//icon_icon.ico')
 
@@ -175,7 +175,7 @@ class App(customtkinter.CTk):
         self.keyboard_frame.grid_columnconfigure(0, weight=1)
 
         self.keyboard_image_label = customtkinter.CTkLabel(self.keyboard_frame, text="", image=self.arrows_image)
-        self.keyboard_image_label.grid(row=0, column=0, padx=(20, 0), pady=(0, 0))
+        self.keyboard_image_label.grid(row=0, column=0, padx=(20, 0), pady=(0, 5))
 
         self.keyboard_instruction_frame = customtkinter.CTkFrame(self.keyboard_frame)
         self.keyboard_instruction_frame.grid(row=1, column=0, padx=(20, 0), pady=(0, 15), sticky="nsew")
