@@ -130,14 +130,14 @@ class App(customtkinter.CTk):
         self.welcome_text = customtkinter.CTkTextbox(self.home_frame, width=300, height=200, corner_radius=0)
         self.welcome_text.grid(row=0, column=0, rowspan=4, padx=(20, 0), pady=(60, 20))
         self.welcome_text.insert(index="0.0", text="\n WELCOME\n\n" +
-                                 " This is program made for RC car control\n\n" +
+                                 " This is program to control RC car\n\n" +
                                  " 1. Connect your device to the car\n\n" +
                                  " 2. Start driving your car\n\n" +
-                                 " You can use keyboard or joystick steering\n\n")
+                                 " Use keyboard or joystick to control the car\n\n")
         self.welcome_text.configure(state="disabled")
 
         self.connection_frame = customtkinter.CTkFrame(self.home_frame, height=200, width=200)
-        self.connection_frame.grid(row=0, column=1, padx=(20, 20), pady=(80, 0))
+        self.connection_frame.grid(row=0, column=1, padx=(20, 20), pady=(50, 0))
         self.port = self.bluetooth_module_port.scanner()
 
         if len(self.port) > 0:
@@ -196,19 +196,19 @@ class App(customtkinter.CTk):
 
         # creating label for radio buttons to control speed
         self.label_radio_speed = customtkinter.CTkLabel(master=self.radiobutton_speed_control_frame, text="Speed Control", font=customtkinter.CTkFont(size=20))
-        self.label_radio_speed.grid(row=0, column=1, columnspan=1, padx=(70, 50), pady=(50, 20), sticky="nsew")
+        self.label_radio_speed.grid(row=0, column=1, columnspan=1, padx=(55, 50), pady=(60, 20), sticky="nsew")
 
         self.radio_30_button = customtkinter.CTkRadioButton(master=self.radiobutton_speed_control_frame, variable=self.radio_var, value=0,
                                                             text="30% of MAX SPEED", font=customtkinter.CTkFont(size=13), command=self.radio_button_1)
-        self.radio_30_button.grid(row=1, column=1, pady=10, padx=(70, 50), sticky="n")
+        self.radio_30_button.grid(row=1, column=1, pady=10, padx=(55, 50), sticky="n")
 
         self.radio_60_button = customtkinter.CTkRadioButton(master=self.radiobutton_speed_control_frame, variable=self.radio_var, value=1,
                                                             text="60% of MAX SPEED", font=customtkinter.CTkFont(size=13), command=self.radio_button_2)
-        self.radio_60_button.grid(row=2, column=1, pady=10, padx=(70, 50), sticky="n")
+        self.radio_60_button.grid(row=2, column=1, pady=10, padx=(55, 50), sticky="n")
 
         self.radio_100_button = customtkinter.CTkRadioButton(master=self.radiobutton_speed_control_frame, variable=self.radio_var, value=2,
                                                              text="100% of MAX SPEED", font=customtkinter.CTkFont(size=13), command=self.radio_button_3)
-        self.radio_100_button.grid(row=3, column=1, pady=10, padx=(76, 50), sticky="n")
+        self.radio_100_button.grid(row=3, column=1, pady=(10, 0), padx=(61, 50), sticky="n")
 
         # create third frame
         self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
@@ -387,7 +387,7 @@ class App(customtkinter.CTk):
                 self.car_database['current_speed_x'] = 75
 
     # function for checking COM port and enabling bluetooth communication
-    def printer(self):
+    def bluetooth_handler(self):
         port = self.bluetooth_module_port.scanner()
         self.console_print("Connecting started...")
         # checking if COM port is found
@@ -455,7 +455,7 @@ class App(customtkinter.CTk):
 
     def connect_button_event(self):
         if self.car_database['connection_status'] == "not connected":
-            new_thread = Thread(target=self.printer, args=(), daemon=True)
+            new_thread = Thread(target=self.bluetooth_handler, args=(), daemon=True)
             new_thread.start()
             self.car_database['connection_status'] = "connected"
         else:
