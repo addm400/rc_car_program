@@ -152,7 +152,7 @@ class App(customtkinter.CTk):
         self.connect_button = customtkinter.CTkButton(self.home_frame, command=self.connect_button_event,
                                                       text="Connect", fg_color="green", hover_color='grey')
         self.connect_button.grid(row=1, column=1, padx=20, pady=(10, 0))
-        # zrobić tak żeby nie dało się kliknąć znowu przycisku connect i dissconnect
+
         self.disconnect_button = customtkinter.CTkButton(self.home_frame, command=self.disconnect_button_event,
                                                          text="Disconnect", fg_color="red", hover_color='grey')
         self.disconnect_button.grid(row=2, column=1, padx=20, pady=10)
@@ -219,7 +219,7 @@ class App(customtkinter.CTk):
 
         self.joystick_board_label = Canvas(self.third_frame, width=self.canvas_database["canvas_width_100"],
                                            height=self.canvas_database["canvas_height_100"], highlightthickness=0)
-        self.joystick_board_label.grid(row=0, column=0, pady=(20, 0), padx=(22, 306))
+        self.joystick_board_label.grid(row=0, column=0, pady=(20, 0), padx=(22, 0))
 
         # scaling images based on scale factor
         self.scaling_image()
@@ -425,7 +425,7 @@ class App(customtkinter.CTk):
         if self.scaleFactor == 1.25:
             self.joystick_board_label.configure(width=self.canvas_database["canvas_width_125"],
                                                 height=self.canvas_database["canvas_height_125"])
-            self.joystick_board_label.grid(row=0, column=0, pady=(20, 0), padx=(0, 360))
+            self.joystick_board_label.grid(row=0, column=0, pady=(20, 0), padx=(0, 0))
             self.keyboard_image_label.grid(row=0, column=0, padx=(20, 0), pady=(0, 0))
 
             self.joystick_board_image = self.joystick_board_image.resize((self.image_database["board_size_125"],
@@ -440,7 +440,7 @@ class App(customtkinter.CTk):
         if self.scaleFactor == 1.5:
             self.joystick_board_label.configure(width=self.canvas_database["canvas_width_150"],
                                                 height=self.canvas_database["canvas_height_150"])
-            self.joystick_board_label.grid(row=0, column=0, pady=(20, 0), padx=(0, 410))
+            self.joystick_board_label.grid(row=0, column=0, pady=(20, 0), padx=(0, 0))
             self.keyboard_image_label.grid(row=0, column=0, padx=(20, 0), pady=(0, 0))
 
             self.joystick_board_image = self.joystick_board_image.resize((self.image_database["board_size_150"],
