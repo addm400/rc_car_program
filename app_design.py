@@ -291,6 +291,7 @@ class App(customtkinter.CTk):
         self.console.configure(state="disabled")
         self.console.see("end")
     # handling radio button events and changing car control values that are ready to send to microcontroller
+
     def radio_button_1(self):
         self.car_database['keyboard_speed_forward'] = 70
         self.car_database['keyboard_speed_backward'] = 110
@@ -305,7 +306,6 @@ class App(customtkinter.CTk):
         self.car_database['keyboard_speed_forward'] = 10
         self.car_database['keyboard_speed_backward'] = 170
         self.console_print("100% of maximum car speed is set")
-
 
     # handling beginning of drag motion
     def drag_start(self, event):
@@ -452,10 +452,6 @@ class App(customtkinter.CTk):
             self.joystick_database["x_home"] = 157
             self.joystick_database["y_home"] = 156
             self.joystick_database['end_value'] = 316
-
-
-    def com_menu_event(self, selection):
-        print(selection)
 
     def connect_button_event(self):
         if self.car_database['connection_status'] == "not connected":

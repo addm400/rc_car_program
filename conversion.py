@@ -2,7 +2,6 @@
 
 class ConversionSys:
     def __init__(self):
-        super().__init__()
 
         self.velocity = {
             "x_speed": 75,
@@ -54,9 +53,9 @@ class ConversionSys:
 
         self.velocity["y2_speed"] = 180 - self.velocity["y1_speed"]
         """
-        1 część zrobiona aby przekształcić dane zebrane z osi Y
-        na wartości odpowiadające sterowaniu mechanizmu micro servo
-        ruch przód-tył, aktualny zakres: 10-170
+        1st part is to transform the data collected from the Y axis
+        to values corresponding to the control of the micro servo mechanism
+        front-back movement, current range: 10-170
         """
 
         if 15 <= self.velocity["x_speed"] <= 81:
@@ -80,9 +79,9 @@ class ConversionSys:
         elif self.velocity["x_speed"] < -81:
             self.velocity["x_speed"] = 145
         """
-        2 część zrobiona aby przekształcić dane zebrane z osi X
-        na wartości odpowiadające sterowaniu silnika (krokowego)
-        skręt kół lewo-prawo, aktualny zakres: 120 - 240 (stopni)
+        2nd part is to transform the data collected from the X axis
+        to values corresponding to the control of the micro servo mechanism
+        left-right wheel rotation, current range: 5 - 145 (degrees)
         """
         return self.velocity
 
@@ -105,9 +104,9 @@ class ConversionSys:
 
         self.velocity["y2_speed"] = 180 - self.velocity["y1_speed"]
         """
-        1 część zrobiona aby przekształcić dane zebrane z osi Y
-        na wartości odpowiadające sterowaniu silnika (DC 3V/6V)
-        ruch przód-tył, aktualny zakres: 92 - 208
+        1st part is to transform the data collected from the Y axis
+        to values corresponding to the control of the micro servo mechanism
+        front-back movement, current range: 10-170
         """
 
         if 28 < self.velocity["x_speed"] < 158:
@@ -123,8 +122,8 @@ class ConversionSys:
         elif self.velocity["x_speed"] <= -158:
             self.velocity["x_speed"] = 145
         """
-        2 część zrobiona aby przekształcić dane zebrane z osi X
-        na wartości odpowiadające sterowaniu silnika (krokowego)
-        skręt kół lewo-prawo, aktualny zakres: 120 - 240 (stopni)
+        2nd part is to transform the data collected from the X axis
+        to values corresponding to the control of the micro servo mechanism
+        left-right wheel rotation, current range: 5 - 145 (degrees)
         """
         return self.velocity

@@ -3,7 +3,6 @@ from pyfirmata2 import Arduino, SERVO
 
 class Blut:
     def __init__(self):
-        super().__init__()
 
         self.data = {
             "x": 180,
@@ -16,7 +15,6 @@ class Blut:
         self.pin5 = 5
         self.pin6 = 6
         self.board = None
-        self.input_data = None  # dorzucić otrzymywanie informacji zwrotnej
 
     def define_port(self, port_value):
         self.data['port'] = port_value
