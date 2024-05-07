@@ -220,7 +220,7 @@ class App(customtkinter.CTk):
 
         self.joystick_board_label = Canvas(self.third_frame, width=self.canvas_database["canvas_width_100"],
                                            height=self.canvas_database["canvas_height_100"], highlightthickness=0)
-        self.joystick_board_label.grid(row=0, column=0, pady=(20, 0), padx=(22, 0))
+        self.joystick_board_label.grid(row=0, column=0, pady=(20, 0), padx=(22, 20))
 
         # scaling images based on scale factor
         self.scaling_image()
