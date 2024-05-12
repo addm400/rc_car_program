@@ -15,7 +15,7 @@ from ports import *
 
 """
 Main file for RC control car program
-v0.7
+version 0.9
 """
 
 
@@ -390,6 +390,7 @@ class App(customtkinter.CTk):
     # function for checking COM port and enabling bluetooth communication
     def bluetooth_handler(self):
         port = self.bluetooth_module_port.scanner()
+        self.bluetooth.define_port(self.bluetooth_module_port.scanner()[0])
         self.console_print("Connecting started...")
         # checking if COM port is found
         if len(port) > 0:
@@ -418,7 +419,7 @@ class App(customtkinter.CTk):
         y1 = self.car_database['current_speed_y1']
         y2 = self.car_database['current_speed_y2']
         self.bluetooth.transmission(x, y1, y2)
-        print(x, y1, y2)
+        # print(x, y1, y2)
         self.alarm = self.after(100, self.trans)
 
     def scaling_image(self):
@@ -463,5 +464,10 @@ class App(customtkinter.CTk):
             self.console_print("Car is alread connected")
 
     def disconnect_button_event(self):
-        pass
+        if self.car_database['connection_status'] == "connected":
+            self.car_database['connection_status'] = "not connected"
+            self.console_print("Car is disconnected")
+            self.bluetooth.stop()
+        else:
+            self.console_print("Car is alread disconnected")
 

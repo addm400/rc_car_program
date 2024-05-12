@@ -2,6 +2,7 @@ from pyfirmata2 import Arduino, SERVO
 
 """
 class for handling bluetooth communication with Arduino
+version 0.9
 """
 
 
@@ -39,6 +40,9 @@ class Blut:
         self.board.digital[self.pin5].write(y1_value)
         self.board.digital[self.pin6].write(y2_value)
         # sending control values to specified pins to the board
+
+    def stop(self):
+        self.board.exit()
 
 
 
