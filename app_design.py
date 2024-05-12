@@ -76,19 +76,19 @@ class App(customtkinter.CTk):
         }
 
         # load images that will be used later
-        image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "test_images")
+        image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "images")
         self.logo_icon = customtkinter.CTkImage(Image.open(os.path.join(image_path, "icon_pic.png")), size=(45, 45))
         self.home_icon = customtkinter.CTkImage(Image.open(os.path.join(image_path, "home_pic.png")), size=(20, 20))
         self.keyboard_icon = customtkinter.CTkImage(Image.open(os.path.join(image_path, "keyboard_pic.png")), size=(20, 20))
         self.joystick_icon = customtkinter.CTkImage(Image.open(os.path.join(image_path, "joystick_pic.png")), size=(20, 20))
         self.arrows_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "wasd_pic.png")), size=(270, 220))
 
-        self.iconbitmap('test_images//icon_icon.ico')
+        self.iconbitmap('images//icon_icon.ico')
 
-        self.joystick_board_image = Image.open('test_images//board_pic.png')
+        self.joystick_board_image = Image.open('images//board_pic.png')
         self.joystick_board_image = self.joystick_board_image.resize((self.image_database["board_size_100"], self.image_database["board_size_100"]))
 
-        self.joystick_circle = Image.open('test_images//circle_pic.png')
+        self.joystick_circle = Image.open('images//circle_pic.png')
         self.joystick_circle = self.joystick_circle.resize((self.image_database["joystick_size_100"], self.image_database["joystick_size_100"]))
 
         # create navigation frame on the left hand side
@@ -455,6 +455,7 @@ class App(customtkinter.CTk):
             self.joystick_database["y_home"] = 156
             self.joystick_database['end_value'] = 316
 
+    # connecting to the car
     def connect_button_event(self):
         if self.car_database['connection_status'] == "not connected":
             new_thread = Thread(target=self.bluetooth_handler, args=(), daemon=True)
@@ -463,11 +464,13 @@ class App(customtkinter.CTk):
         else:
             self.console_print("Car is alread connected")
 
+    # disconnecting from a car
     def disconnect_button_event(self):
         if self.car_database['connection_status'] == "connected":
             self.car_database['connection_status'] = "not connected"
             self.console_print("Car is disconnected")
             self.bluetooth.stop()
+            self.after_cancel(self.alarm)
         else:
             self.console_print("Car is alread disconnected")
 
