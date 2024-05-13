@@ -1,5 +1,5 @@
 This is repo made for RC car control program.
-Car is based on Arduino Nano microcontroller.
+The car is based on Arduino Nano microcontroller.
 
 GUI, communication between PC and Car is written in Python.  
 Program is sending data to microcontroller Arduino Nano via bluetooth.  

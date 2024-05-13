@@ -15,7 +15,7 @@ from ports import *
 
 """
 Main file for RC control car program
-version 0.9
+version 1.0
 """
 
 
@@ -462,7 +462,7 @@ class App(customtkinter.CTk):
             new_thread.start()
             self.car_database['connection_status'] = "connected"
         else:
-            self.console_print("Car is alread connected")
+            self.console_print("Car is already connected")
 
     # disconnecting from a car
     def disconnect_button_event(self):
@@ -472,5 +472,5 @@ class App(customtkinter.CTk):
             self.bluetooth.stop()
             self.after_cancel(self.alarm)
         else:
-            self.console_print("Car is alread disconnected")
+            self.console_print("Car is already disconnected")
 

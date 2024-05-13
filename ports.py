@@ -3,7 +3,7 @@ import serial.tools.list_ports
 """
 class for getting COM connections from PC 
 and finding HC-05
-version 0.9
+version 1.0
 """
 
 

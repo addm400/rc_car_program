@@ -2,7 +2,7 @@ from pyfirmata2 import Arduino, SERVO
 
 """
 class for handling bluetooth communication with Arduino
-version 0.9
+version 1.0
 """
 
 

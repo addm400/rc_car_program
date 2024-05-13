@@ -2,7 +2,7 @@
 from app_design import *
 
 """
-version 0.9
+version 1.0
 """
 
 if __name__ == "__main__":

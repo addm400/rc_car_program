@@ -2,7 +2,7 @@
 """
 Class made to convert values given by gui to
 control values of a car
-version 0.9
+version 1.0
 """
 
 
